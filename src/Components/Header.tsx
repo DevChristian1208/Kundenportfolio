@@ -61,14 +61,6 @@ const Header = () => {
                   scrolled ? "text-black" : "text-white"
                 }`}
               >
-                <span className="cursor-pointer hover:text-[#ea4343] hidden lg:flex">
-                  EN
-                </span>
-                <span className="mx-2 hidden lg:flex">|</span>
-                <span className="cursor-pointer hover:text-[#ea4343] hidden lg:flex">
-                  DE
-                </span>
-
                 <div
                   className="lg:hidden flex items-center cursor-pointer ml-4 group"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -124,15 +116,7 @@ const Header = () => {
                 </li>
               ))}
             </ul>
-            <div className="flex justify-center gap-4 py-2 border-t border-gray-200">
-              <span className="cursor-pointer font-semibold text-black text-lg hover:text-[#ea4343] hover:scale-105">
-                EN
-              </span>
-              <span className="text-black text-lg">|</span>
-              <span className="cursor-pointer font-semibold text-black text-lg hover:text-[#ea4343] hover:scale-105">
-                DE
-              </span>
-            </div>
+            <div className="flex justify-center gap-4 py-2 border-t border-gray-200"></div>
           </div>
         )}
       </div>
