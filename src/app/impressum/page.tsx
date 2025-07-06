@@ -1,4 +1,3 @@
-
 "use client";
 
 import Header from "@/Components/Header";
@@ -12,21 +11,29 @@ export default function Impressum() {
       <main className="flex-grow p-6 max-w-3xl mx-auto pt-32">
         <h1 className="text-3xl font-bold mb-6">Impressum</h1>
 
-        <p className="mb-2"><strong>Angaben gemäß § 5 TMG:</strong></p>
-        <p>Christian Seidel<br />
-        Am Hang 4<br />
-        95152 Selbitz</p>
+        <p className="mb-2">
+          <strong>Angaben gemäß § 5 TMG:</strong>
+        </p>
+        <p>
+          Christian Seidel
+          <br />
+          Am Hang 4<br />
+          95152 Selbitz
+        </p>
 
-        <p className="mt-6 mb-2"><strong>Kontakt:</strong></p>
+        <p className="mt-6 mb-2">
+          <strong>Kontakt:</strong>
+        </p>
         <p>E-Mail: christian.pressig@web.de</p>
 
-        <p className="mt-6 mb-2"><strong>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</strong></p>
-        <p>Christian Seidel<br />
-        Am Hang 4<br />
-        95152 Selbitz</p>
-
-        <p className="mt-6 text-sm text-gray-400">
-          Hinweis: Die Website befindet sich im Aufbau. Es liegt derzeit keine Eintragung im Handelsregister vor und es wurde noch keine Umsatzsteuer-ID vergeben.
+        <p className="mt-6 mb-2">
+          <strong>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</strong>
+        </p>
+        <p>
+          Christian Seidel
+          <br />
+          Am Hang 4<br />
+          95152 Selbitz
         </p>
       </main>
 

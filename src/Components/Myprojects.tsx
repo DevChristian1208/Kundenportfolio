@@ -59,9 +59,8 @@ const MyProjects = () => {
   const closeDialog = () => setActiveSkillIndex(null);
 
   return (
-    <section className="pt-20 pb-20 bg-[#1e1e2f] text-white">
+    <section id="portfolio" className="pt-20 pb-20 bg-[#1e1e2f] text-white">
       <div className="container mx-auto px-4">
-        {/* Projekte */}
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-gradient mb-2">
             Meine Projekte
@@ -73,7 +72,6 @@ const MyProjects = () => {
         </div>
 
         <div className="flex flex-col gap-12 mb-20">
-          {/* Projekt 1 */}
           <div className="flex flex-col lg:flex-row gap-8 bg-[#2a2a3d] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
             <img
               src="/join.png"

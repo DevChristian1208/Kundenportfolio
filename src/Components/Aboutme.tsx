@@ -71,21 +71,6 @@ const Aboutme = ({ myname }: AboutmeProps) => {
               zugeschnitten.
             </p>
           </div>
-          <div>
-            <a
-              href="/IMG_3721.jpg"
-              download
-              className="inline-flex items-center gap-2 bg-[#ea4343] text-white px-6 py-3 rounded-md hover:bg-[#d03030] transition"
-            >
-              <span>Download CV</span>
-              <Image
-                src="/download.svg"
-                alt="Download"
-                width={16}
-                height={16}
-              />
-            </a>
-          </div>
         </div>
       </div>
     </div>

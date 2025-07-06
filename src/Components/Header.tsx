@@ -90,11 +90,7 @@ const Header = () => {
               className={`flex items-center font-semibold ${
                 scrolled ? "text-black" : "text-white"
               }`}
-            >
-              <span className="cursor-pointer hover:text-[#ea4343]">EN</span>
-              <span className="mx-2">|</span>
-              <span className="cursor-pointer hover:text-[#ea4343]">DE</span>
-            </div>
+            ></div>
           )}
         </div>
 
