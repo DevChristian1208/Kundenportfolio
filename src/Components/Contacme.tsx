@@ -21,15 +21,12 @@ const Contact = () => {
     };
 
     try {
-      // Hier muss der Endpunkt angepasst werden
       const res = await fetch("/api/contact/", {
-        // Die korrekte URL in App Directory Struktur
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      // Überprüfe, ob die Antwort ok ist und nicht leer
       if (res.ok) {
         const data = await res.json();
         setSuccessMessage(data.message || "Mail wurde gesendet!");
@@ -46,7 +43,6 @@ const Contact = () => {
       setVisible(true);
     }
 
-    // Verstecke die Erfolgsmeldung nach 1.5s
     setTimeout(() => {
       setVisible(false);
     }, 1500);
@@ -58,7 +54,6 @@ const Contact = () => {
 
   return (
     <section id="contact" className="bg-[#3c3c3c] text-white py-24 px-4">
-      {/* Erfolgsmeldung fix und unten zentriert */}
       {successMessage && (
         <div className="fixed bottom-16 left-0 w-full flex justify-center px-4 z-50">
           <div
