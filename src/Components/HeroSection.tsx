@@ -54,7 +54,7 @@ const HeroSection = () => {
         <div className="w-full min-h-screen relative bg-[#3c3c3c] overflow-hidden">
           <div className="max-w-[1400px] mx-auto w-full px-6 md:px-10 py-12 md:py-20 flex flex-col-reverse lg:flex-row items-center justify-between gap-12 relative">
             <div className="w-full lg:w-1/2 text-center lg:text-left">
-              <span className="font-josefin text-[22px] md:text-[25px] font-bold text-white tracking-tight mb-4 inline-block">
+              <span className="font-josefin text-[22px] md:text-[25px] font-bold text-white tracking-tight mb-1 inline-block">
                 Hallo ich bin
               </span>
               <h3 className="text-[50px] md:text-[85px] lg:text-[100px] font-bold text-[#ea4343] tracking-tight leading-tight">
@@ -62,10 +62,10 @@ const HeroSection = () => {
               </h3>
               <div className="text-[24px] md:text-[40px] font-bold text-white tracking-tight font-josefin">
                 <span>
-                  <span className="text-white">Creative </span>
                   <b>Frontend Developer</b>
                 </span>
               </div>
+
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start mt-9 mb-10 gap-5">
                 <a
                   className="text-white font-josefin bg-[#ea4343] font-bold px-10 py-4 rounded-md border-2 border-[#ea4343] transition-all hover:bg-transparent hover:text-black"
@@ -88,7 +88,6 @@ const HeroSection = () => {
                 </a>
               </div>
             </div>
-
             <div
               ref={imageContainerRef}
               className="relative w-full lg:w-[40%] h-[400px] sm:h-[500px] lg:h-[700px] transition-transform duration-300 ease-out will-change-transform"
@@ -96,12 +95,13 @@ const HeroSection = () => {
               <div className="relative w-full h-full top-[25px]">
                 <Image src="/file.png" alt="" fill className="object-contain" />
               </div>
-              <div className="hidden sm:block">
-                <div className="absolute top-[15%] right-[25%] w-[100px] h-[100px] bg-[#ea4343] z-[-1]"></div>
-                <div className="absolute top-[50%] right-[65%] w-[250px] h-[250px] bg-[#ea4343] z-[-1] blur-xl opacity-60"></div>
-                <div className="absolute top-[20%] right-[30%] w-[250px] h-[300px] border-[4px] border-white z-[-1]"></div>
-                <h3 className="absolute top-1/2 -translate-y-1/2 right-[-145px] z-[-2] mt-[-70px]">
-                  <span className="text-[200px] lg:text-[260px] text-transparent font-montserrat font-bold stroke-[3px] stroke-white/30">
+
+              <div className="block">
+                <div className="absolute top-[10%] right-[15%] w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] bg-[#ea4343] z-[-1]"></div>
+                <div className="absolute top-[50%] right-[20%] w-[150px] h-[150px] sm:w-[250px] sm:h-[250px] bg-[#ea4343] z-[-1] blur-xl opacity-60"></div>
+                <div className="absolute top-[25%] right-[25%] w-[120px] h-[160px] sm:w-[250px] sm:h-[300px] border-[3px] sm:border-[4px] border-white z-[-1]"></div>
+                <h3 className="absolute top-1/2 -translate-y-1/2 right-[-80px] sm:right-[-145px] z-[-2] mt-[-40px] sm:mt-[-70px]">
+                  <span className="text-[100px] sm:text-[200px] lg:text-[260px] text-transparent font-montserrat font-bold stroke-[2px] sm:stroke-[3px] stroke-white/30">
                     Aali
                   </span>
                 </h3>
