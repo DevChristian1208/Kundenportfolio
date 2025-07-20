@@ -11,7 +11,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#2f2f2f] text-white py-10 px-4">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="logo text-xl font-bold font-['Press_Start_2P'] text-[#ea4343]">
+        <div className="text-2xl font-mono font-bold text-[#ea4343]">
           &lt;CS&gt;
         </div>
 

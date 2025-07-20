@@ -35,10 +35,9 @@ const Header = () => {
     >
       <div className="max-w-[1600px] w-full px-6 sm:px-10 mx-auto">
         <div className="w-full h-[57px] flex items-center justify-between py-[30px] transition-all duration-300">
-          <div className="logo text-xl font-bold font-['Press_Start_2P'] text-[#ea4343]">
+          <div className="text-2xl font-mono font-bold text-[#ea4343]">
             &lt;CS&gt;
           </div>
-
           {!isSimplePage ? (
             <div className="menu flex items-center">
               <ul className="flex m-0 list-none hidden lg:flex">
