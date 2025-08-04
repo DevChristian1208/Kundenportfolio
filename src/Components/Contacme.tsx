@@ -53,7 +53,10 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="bg-[#3c3c3c] text-white py-24 px-4">
+    <section
+      id="contact"
+      className="bg-gradient-to-b from-[#3f3f5f] via-[#3f3f5f] to-[#3f3f5f] text-white py-24 px-4"
+    >
       {successMessage && (
         <div className="fixed bottom-16 left-0 w-full flex justify-center px-4 z-50">
           <div

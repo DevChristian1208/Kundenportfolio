@@ -40,7 +40,7 @@ const MyProjects = () => {
     },
   ];
 
-  const [activeSkillIndex, setActiveSkillIndex] = useState<number | null>(null);
+  const [activeSkillIndex, setActiveSkillIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -52,15 +52,21 @@ const MyProjects = () => {
     return () => window.removeEventListener("resize", checkSize);
   }, []);
 
-  const handleToggle = (index: number) => {
+  const handleToggle = (index: any) => {
     setActiveSkillIndex((prev) => (prev === index ? null : index));
   };
 
   const closeDialog = () => setActiveSkillIndex(null);
 
   return (
-    <section id="portfolio" className="pt-20 pb-20 bg-[#1e1e2f] text-white">
-      <div className="container mx-auto px-4">
+    <section
+      id="portfolio"
+      className="relative pt-20 pb-20 bg-[#1e1e2f] text-white overflow-hidden"
+    >
+      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-pink-500 opacity-30 blur-3xl rounded-full animate-pulse-slow z-0" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#00ffd9] opacity-20 blur-[120px] rounded-full animate-pulse-slow z-0" />
+
+      <div className="container relative z-10 mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-gradient mb-2">
             Meine Projekte
@@ -72,83 +78,62 @@ const MyProjects = () => {
         </div>
 
         <div className="flex flex-col gap-12 mb-20">
-          <div className="flex flex-col lg:flex-row gap-8 bg-[#2a2a3d] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-            <img
-              src="/join.png"
-              alt="Join Project"
-              className="w-full lg:w-1/2 rounded-md object-cover"
-            />
-            <div className="flex flex-col justify-between">
-              <div>
-                <h3 className="text-2xl font-bold mb-2 text-gradient">Join</h3>
-                <p className="text-[#00ffd9] mb-2">
-                  JavaScript | HTML | CSS | Firebase
-                </p>
-                <p className="text-sm text-gray-300 mb-4">
-                  Ein webbasiertes Aufgaben-Tool im Kanban-Stil – mit Login,
-                  Drag & Drop und Realtime-Datenbank.
-                </p>
-              </div>
-              <div className="flex gap-3">
-                <a
-                  href="https://github.com/deinlink"
-                  target="_blank"
-                  className="border border-pink-500 px-4 py-2 rounded hover:bg-pink-500 transition text-sm"
-                >
-                  GitHub
-                </a>
-                <a
-                  href="https://join.christianseidel-developer.de"
-                  target="_blank"
-                  className="bg-[#00ffd9] text-black px-4 py-2 rounded hover:bg-opacity-80 transition text-sm"
-                >
-                  Live Demo
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Projekt 2 */}
-          <div className="flex flex-col lg:flex-row gap-8 bg-[#2a2a3d] rounded-xl p-6 shadow-lg hover:shadow-xl transition">
-            <img
-              src="/startscreen_1.png"
-              alt="El Pollo Loco"
-              className="w-full lg:w-1/2 rounded-md object-cover"
-            />
-            <div className="flex flex-col justify-between">
-              <div>
-                <h3 className="text-2xl font-bold mb-2 text-gradient">
-                  El Pollo Loco
-                </h3>
-                <p className="text-[#00ffd9] mb-2">
-                  JavaScript | HTML | CSS | OOP
-                </p>
-                <p className="text-sm text-gray-300 mb-4">
-                  Ein Jump’n’Run-Spiel mit klassischer Objektorientierung.
-                  Spielfigur Pepe kämpft gegen die verrückte Henne.
-                </p>
-              </div>
-              <div className="flex gap-3">
-                <a
-                  href="https://github.com/deinlink"
-                  target="_blank"
-                  className="border border-pink-500 px-4 py-2 rounded hover:bg-pink-500 transition text-sm"
-                >
-                  GitHub
-                </a>
-                <a
-                  href="https://elpolloloco.christianseidel-developer.de"
-                  target="_blank"
-                  className="bg-[#00ffd9] text-black px-4 py-2 rounded hover:bg-opacity-80 transition text-sm"
-                >
-                  Live Demo
-                </a>
+          {[
+            {
+              title: "Join",
+              img: "/join.png",
+              stack: "JavaScript | HTML | CSS | Firebase",
+              desc: "Ein webbasiertes Aufgaben-Tool im Kanban-Stil – mit Login, Drag & Drop und Realtime-Datenbank.",
+              github: "https://github.com/deinlink",
+              demo: "https://join.christianseidel-developer.de",
+            },
+            {
+              title: "El Pollo Loco",
+              img: "/startscreen_1.png",
+              stack: "JavaScript | HTML | CSS | OOP",
+              desc: "Ein Jump’n’Run-Spiel mit klassischer Objektorientierung. Spielfigur Pepe kämpft gegen die verrückte Henne.",
+              github: "https://github.com/deinlink",
+              demo: "https://elpolloloco.christianseidel-developer.de",
+            },
+          ].map((project, i) => (
+            <div
+              key={i}
+              className="flex flex-col lg:flex-row gap-8 bg-[#2a2a3d]/80 rounded-xl p-6 shadow-lg hover:shadow-xl transition backdrop-blur-md"
+            >
+              <img
+                src={project.img}
+                alt={project.title}
+                className="w-full lg:w-1/2 rounded-md object-cover"
+              />
+              <div className="flex flex-col justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold mb-2 text-gradient">
+                    {project.title}
+                  </h3>
+                  <p className="text-[#00ffd9] mb-2">{project.stack}</p>
+                  <p className="text-sm text-gray-300 mb-4">{project.desc}</p>
+                </div>
+                <div className="flex gap-3">
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    className="border border-pink-500 px-4 py-2 rounded hover:bg-pink-500 transition text-sm"
+                  >
+                    GitHub
+                  </a>
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    className="bg-[#00ffd9] text-black px-4 py-2 rounded hover:bg-opacity-80 transition text-sm"
+                  >
+                    Live Demo
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
 
-        {/* Skills */}
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-gradient mb-2">
             Meine Fähigkeiten
@@ -179,57 +164,31 @@ const MyProjects = () => {
         </div>
 
         {activeSkillIndex !== null && (
-          <>
-            {isMobile ? (
-              <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-[rgba(30,30,47,0.6)] backdrop-blur-md">
-                <div className="bg-[#29293a] rounded-xl p-6 relative w-full max-w-md mx-auto border border-[#00ffc6] shadow-lg">
-                  <button
-                    onClick={closeDialog}
-                    className="absolute top-3 right-4 text-xl text-[#00ffc6] hover:text-pink-500 transition cursor-pointer"
-                  >
-                    ✕
-                  </button>
-                  <div className="flex flex-col items-center gap-4">
-                    <img
-                      src={skills[activeSkillIndex].img}
-                      alt={skills[activeSkillIndex].name}
-                      className="w-16 h-16"
-                    />
-                    <h3 className="text-2xl font-semibold">
-                      {skills[activeSkillIndex].name}
-                    </h3>
-                    <p className="text-sm text-gray-300 text-center">
-                      {skills[activeSkillIndex].desc}
-                    </p>
-                  </div>
-                </div>
+          <div
+            className={`fixed inset-0 z-50 flex items-center justify-center px-4 bg-[rgba(30,30,47,0.7)] backdrop-blur-md`}
+          >
+            <div className="bg-[#29293a] rounded-xl p-6 relative w-full max-w-md mx-auto border border-[#00ffc6] shadow-lg">
+              <button
+                onClick={closeDialog}
+                className="absolute top-3 right-4 text-xl text-[#00ffc6] hover:text-pink-500 transition cursor-pointer"
+              >
+                ✕
+              </button>
+              <div className="flex flex-col items-center gap-4">
+                <img
+                  src={skills[activeSkillIndex].img}
+                  alt={skills[activeSkillIndex].name}
+                  className="w-16 h-16"
+                />
+                <h3 className="text-2xl font-semibold">
+                  {skills[activeSkillIndex].name}
+                </h3>
+                <p className="text-sm text-gray-300 text-center">
+                  {skills[activeSkillIndex].desc}
+                </p>
               </div>
-            ) : (
-              <div className="bg-[#29293a] border border-[#00ffc6] rounded-xl p-6 relative w-[80vw] mx-auto shadow-lg animate-fade-in">
-                <button
-                  onClick={closeDialog}
-                  className="absolute top-3 right-4 text-xl text-[#00ffc6] hover:text-pink-500 transition cursor-pointer"
-                >
-                  ✕
-                </button>
-                <div className="flex flex-col sm:flex-row items-center gap-6">
-                  <img
-                    src={skills[activeSkillIndex].img}
-                    alt={skills[activeSkillIndex].name}
-                    className="w-16 h-16"
-                  />
-                  <div>
-                    <h3 className="text-2xl font-semibold mb-2">
-                      {skills[activeSkillIndex].name}
-                    </h3>
-                    <p className="text-gray-300 text-sm">
-                      {skills[activeSkillIndex].desc}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
+            </div>
+          </div>
         )}
       </div>
     </section>

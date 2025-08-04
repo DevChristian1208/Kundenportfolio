@@ -14,7 +14,6 @@ const HeroSection = () => {
     const handleMouseMove = (e: MouseEvent) => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-
       const xPercent = (e.clientX / vw - 0.5) * 2;
       const yPercent = (e.clientY / vh - 0.5) * 2;
 
@@ -50,72 +49,95 @@ const HeroSection = () => {
   return (
     <>
       <Header />
-      <div className="w-full h-auto" id="home">
-        <div className="w-full min-h-screen relative bg-[#3c3c3c] overflow-hidden">
-          <div className="max-w-[1400px] mx-auto w-full px-6 md:px-10 py-12 md:py-20 flex flex-col-reverse lg:flex-row items-center justify-between gap-12 relative">
-            <div className="w-full lg:w-1/2 text-center lg:text-left">
-              <span className="font-josefin text-[22px] md:text-[25px] font-bold text-white tracking-tight mb-1 inline-block">
-                Hallo ich bin
-              </span>
-              <h3 className="text-[50px] md:text-[85px] lg:text-[100px] font-bold text-[#ea4343] tracking-tight leading-tight">
-                Christian
-              </h3>
-              <div className="text-[24px] md:text-[40px] font-bold text-white tracking-tight font-josefin">
-                <span>
-                  <b>Frontend Developer</b>
-                </span>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start mt-9 mb-10 gap-5">
-                <a
-                  className="text-white font-josefin bg-[#ea4343] font-bold px-10 py-4 rounded-md border-2 border-[#ea4343] transition-all hover:bg-transparent hover:text-black"
-                  href="#contact"
-                >
-                  Say Hello{" "}
-                  <Image
-                    src="/message.svg"
-                    alt=""
-                    width={16}
-                    height={16}
-                    className="inline ml-2"
-                  />
-                </a>
-                <a
-                  className="text-white font-josefin font-bold transition-all hover:text-[#ea4343]"
-                  href="#about"
-                >
-                  About Me
-                </a>
-              </div>
-            </div>
-            <div
-              ref={imageContainerRef}
-              className="relative w-full lg:w-[40%] h-[400px] sm:h-[500px] lg:h-[700px] transition-transform duration-300 ease-out will-change-transform"
-            >
-              <div className="relative w-full h-full top-[25px]">
-                <Image src="/file.png" alt="" fill className="object-contain" />
-              </div>
-
-              <div className="block">
-                <div className="absolute top-[10%] right-[15%] w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] bg-[#ea4343] z-[-1]"></div>
-                <div className="absolute top-[50%] right-[20%] w-[150px] h-[150px] sm:w-[250px] sm:h-[250px] bg-[#ea4343] z-[-1] blur-xl opacity-60"></div>
-                <div className="absolute top-[25%] right-[25%] w-[120px] h-[160px] sm:w-[250px] sm:h-[300px] border-[3px] sm:border-[4px] border-white z-[-1]"></div>
-                <h3 className="absolute top-1/2 -translate-y-1/2 right-[-80px] sm:right-[-145px] z-[-2] mt-[-40px] sm:mt-[-70px]">
-                  <span className="text-[100px] sm:text-[200px] lg:text-[260px] text-transparent font-montserrat font-bold stroke-[2px] sm:stroke-[3px] stroke-white/30">
-                    Aali
-                  </span>
-                </h3>
-              </div>
+      <section
+        id="home"
+        className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#3a1a1a]"
+      >
+        <div className="absolute w-[500px] h-[500px] top-[20%] left-[5%] bg-[#ea4343] opacity-30 blur-[120px] rounded-full animate-fadePulse z-0"></div>
+        <div className="absolute w-[400px] h-[400px] bottom-[10%] right-[5%] bg-[#38bdf8] opacity-25 blur-[100px] rounded-full animate-fadePulse delay-[4s] z-0"></div>
+        <div className="max-w-7xl w-full mx-auto px-6 md:px-10 flex flex-col lg:flex-row items-center justify-between py-20 gap-14 relative z-10">
+          <div
+            ref={imageContainerRef}
+            className="order-1 lg:order-none relative w-full max-w-[400px] sm:max-w-[500px] lg:max-w-[600px] h-[400px] sm:h-[500px] lg:h-[700px] transition-transform duration-300 ease-out will-change-transform"
+          >
+            <div className="relative w-full h-full top-[25px]">
+              <Image
+                src="/file.png"
+                alt="Christian"
+                fill
+                className="object-contain"
+              />
             </div>
           </div>
 
-          <div className="absolute bottom-6 left-4 md:left-[50px]">
-            <a className="text-white text-[16px] md:text-[21px]" href="#">
-              christian.pressig@web.de
-            </a>
+          <div className="order-2 lg:order-none flex-1 text-center lg:text-left space-y-6 animate-fade-in">
+            <h1 className="text-white text-2xl sm:text-3xl font-light">
+              Hallo, ich bin
+            </h1>
+            <h2 className="text-[#ea4343] text-[60px] sm:text-[80px] font-extrabold leading-none">
+              Christian
+            </h2>
+            <h3 className="text-white text-2xl sm:text-4xl font-semibold">
+              Frontend Developer
+            </h3>
+
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-5 pt-6">
+              <a
+                href="#contact"
+                className="bg-[#ea4343] hover:bg-transparent text-white hover:text-[#ea4343] border-2 border-[#ea4343] px-8 py-3 rounded-lg font-semibold transition-all flex items-center gap-2"
+              >
+                Say Hello
+                <Image src="/message.svg" alt="" width={16} height={16} />
+              </a>
+              <a
+                href="#about"
+                className="text-white hover:text-[#ea4343] font-semibold transition-colors"
+              >
+                About Me
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+
+        <div className="absolute bottom-6 right-10 text-white text-sm md:text-base z-10">
+          <a href="mailto:christian.pressig@web.de" className="hover:underline">
+            christian.pressig@web.de
+          </a>
+        </div>
+      </section>
+
+      <style jsx>{`
+        .animate-fade-in {
+          animation: fadeIn 1s ease-out forwards;
+        }
+
+        .animate-fadePulse {
+          animation: fadePulse 10s ease-in-out infinite;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadePulse {
+          0%,
+          100% {
+            transform: scale(1);
+            opacity: 0.25;
+          }
+          50% {
+            transform: scale(1.08);
+            opacity: 0.4;
+          }
+        }
+      `}</style>
     </>
   );
 };

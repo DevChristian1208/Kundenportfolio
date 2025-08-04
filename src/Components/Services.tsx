@@ -29,7 +29,7 @@ const tiers = [
       "Kontaktformular",
       "DSGVO & Impressum",
     ],
-    featured: true,
+    featured: false,
   },
   {
     name: "Premium Paket",
@@ -49,7 +49,7 @@ const tiers = [
   },
 ];
 
-function classNames(...classes: string[]) {
+function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
@@ -57,14 +57,14 @@ const Services = () => {
   return (
     <section
       id="service"
-      className="relative isolate bg-[#3c3c3c] py-24 px-6 sm:px-12 lg:px-20 text-white"
+      className="relative isolate bg-gradient-to-b from-[#2b2b3d] via-[#2f2f43] to-[#3f3f5f] py-24 px-6 sm:px-12 lg:px-20 text-white"
     >
-      <div className="max-w-7xl mx-auto text-center">
+      <div className="max-w-7xl mx-auto text-center relative z-10">
         <span className="text-[#ea4343] font-semibold uppercase text-sm block mb-2">
           Was ich anbiete
         </span>
         <h2 className="text-5xl font-bold mb-4">My Services</h2>
-        <p className="text-gray-300 max-w-3xl mx-auto mb-16 text-lg">
+        <p className="text-gray-200 max-w-3xl mx-auto mb-16 text-lg">
           Ich erstelle professionelle Websites für kleine Unternehmen wie
           Arztpraxen, Restaurants, Friseure oder Handwerksbetriebe. Modern,
           mobiloptimiert, DSGVO-konform – mit klarem Fokus auf Kundennutzen.
@@ -75,26 +75,23 @@ const Services = () => {
             <div
               key={tier.id}
               className={classNames(
-                tier.featured ? "bg-[#222222]" : "bg-[#2f2f2f]",
+                tier.featured ? "bg-[#ea4343]/90" : "bg-[#00ffd9]/10",
                 "rounded-3xl p-8 flex flex-col transition-transform duration-300 hover:scale-[1.03] cursor-pointer",
-                "hover:ring-2 hover:ring-[#ea4343] hover:shadow-2xl"
+                "hover:bg-[#ea4343] hover:text-white hover:ring-0 hover:shadow-2xl"
               )}
             >
-              <h3
-                id={tier.id}
-                className={classNames("text-[#ea4343] text-xl font-bold")}
-              >
+              <h3 id={tier.id} className="text-white text-xl font-bold">
                 {tier.name}
               </h3>
-              <p className="mt-2 text-gray-400 text-sm">{tier.description}</p>
+              <p className="mt-2 text-white/80 text-sm">{tier.description}</p>
               <p className="mt-4 flex items-baseline justify-center gap-x-2 font-semibold text-3xl">
                 <span>{tier.price}</span>
-                <span className="text-base text-gray-400">ab</span>
+                <span className="text-base text-white/60">ab</span>
               </p>
 
               <ul
                 role="list"
-                className="mt-6 space-y-3 text-gray-300 text-sm flex-1"
+                className="mt-6 space-y-3 text-white/90 text-sm flex-1"
               >
                 {tier.features.map((feature) => (
                   <li
