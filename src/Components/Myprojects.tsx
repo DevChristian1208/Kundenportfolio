@@ -1,8 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+
+type Skill = {
+  name: string;
+  img: string;
+  desc: string;
+};
 
 const MyProjects = () => {
-  const skills = [
+  const skills: Skill[] = [
     {
       name: "HTML",
       img: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg",
@@ -40,19 +46,9 @@ const MyProjects = () => {
     },
   ];
 
-  const [activeSkillIndex, setActiveSkillIndex] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [activeSkillIndex, setActiveSkillIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    const checkSize = () => {
-      setIsMobile(window.innerWidth < 1000);
-    };
-    checkSize();
-    window.addEventListener("resize", checkSize);
-    return () => window.removeEventListener("resize", checkSize);
-  }, []);
-
-  const handleToggle = (index: any) => {
+  const handleToggle = (index: number) => {
     setActiveSkillIndex((prev) => (prev === index ? null : index));
   };
 
@@ -63,10 +59,12 @@ const MyProjects = () => {
       id="portfolio"
       className="relative pt-20 pb-20 bg-[#1e1e2f] text-white overflow-hidden"
     >
+      {/* Background effects */}
       <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-pink-500 opacity-30 blur-3xl rounded-full animate-pulse-slow z-0" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#00ffd9] opacity-20 blur-[120px] rounded-full animate-pulse-slow z-0" />
 
       <div className="container relative z-10 mx-auto px-4">
+        {/* Projects */}
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-gradient mb-2">
             Meine Projekte
@@ -117,6 +115,7 @@ const MyProjects = () => {
                   <a
                     href={project.github}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="border border-pink-500 px-4 py-2 rounded hover:bg-pink-500 transition text-sm"
                   >
                     GitHub
@@ -124,6 +123,7 @@ const MyProjects = () => {
                   <a
                     href={project.demo}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-[#00ffd9] text-black px-4 py-2 rounded hover:bg-opacity-80 transition text-sm"
                   >
                     Live Demo
@@ -134,6 +134,7 @@ const MyProjects = () => {
           ))}
         </div>
 
+        {/* Skills */}
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-gradient mb-2">
             Meine Fähigkeiten
@@ -163,10 +164,9 @@ const MyProjects = () => {
           ))}
         </div>
 
+        {/* Skill modal */}
         {activeSkillIndex !== null && (
-          <div
-            className={`fixed inset-0 z-50 flex items-center justify-center px-4 bg-[rgba(30,30,47,0.7)] backdrop-blur-md`}
-          >
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-[rgba(30,30,47,0.7)] backdrop-blur-md">
             <div className="bg-[#29293a] rounded-xl p-6 relative w-full max-w-md mx-auto border border-[#00ffc6] shadow-lg">
               <button
                 onClick={closeDialog}
