@@ -46,6 +46,33 @@ const MyProjects = () => {
     },
   ];
 
+  const projects = [
+    {
+      title: "Join",
+      img: "/join.png",
+      stack: "JavaScript | HTML | CSS | Firebase",
+      desc: "Ein webbasiertes Aufgaben-Tool im Kanban-Stil – mit Login, Drag & Drop und Realtime-Datenbank.",
+      github: "https://github.com/deinlink",
+      demo: "https://join.christianseidel-developer.de",
+    },
+    {
+      title: "El Pollo Loco",
+      img: "/startscreen_1.png",
+      stack: "JavaScript | HTML | CSS | OOP",
+      desc: "Ein Jump’n’Run-Spiel mit klassischer Objektorientierung. Spielfigur Pepe kämpft gegen die verrückte Henne.",
+      github: "https://github.com/deinlink",
+      demo: "https://elpolloloco.christianseidel-developer.de",
+    },
+    {
+      title: "DABubble",
+      img: "/DaBubble.png",
+      stack: "Next.JS | Tailwind | Firebase",
+      desc: "Mit DaBubble können sich Nutzer anmelden, Channels erstellen und Direktnachrichten verschicken. Die Anwendung ermöglicht eine einfache Teamkommunikation in Echtzeit und orientiert sich am Prinzip von Slack.",
+      github: "https://github.com/deinlink",
+      demo: "https://elpolloloco.christianseidel-developer.de",
+    },
+  ];
+
   const [activeSkillIndex, setActiveSkillIndex] = useState<number | null>(null);
 
   const handleToggle = (index: number) => {
@@ -59,12 +86,10 @@ const MyProjects = () => {
       id="portfolio"
       className="relative pt-20 pb-20 bg-[#1e1e2f] text-white overflow-hidden"
     >
-      {/* Background effects */}
       <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-pink-500 opacity-30 blur-3xl rounded-full animate-pulse-slow z-0" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#00ffd9] opacity-20 blur-[120px] rounded-full animate-pulse-slow z-0" />
 
       <div className="container relative z-10 mx-auto px-4">
-        {/* Projects */}
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-gradient mb-2">
             Meine Projekte
@@ -76,24 +101,7 @@ const MyProjects = () => {
         </div>
 
         <div className="flex flex-col gap-12 mb-20">
-          {[
-            {
-              title: "Join",
-              img: "/join.png",
-              stack: "JavaScript | HTML | CSS | Firebase",
-              desc: "Ein webbasiertes Aufgaben-Tool im Kanban-Stil – mit Login, Drag & Drop und Realtime-Datenbank.",
-              github: "https://github.com/deinlink",
-              demo: "https://join.christianseidel-developer.de",
-            },
-            {
-              title: "El Pollo Loco",
-              img: "/startscreen_1.png",
-              stack: "JavaScript | HTML | CSS | OOP",
-              desc: "Ein Jump’n’Run-Spiel mit klassischer Objektorientierung. Spielfigur Pepe kämpft gegen die verrückte Henne.",
-              github: "https://github.com/deinlink",
-              demo: "https://elpolloloco.christianseidel-developer.de",
-            },
-          ].map((project, i) => (
+          {projects.map((project, i) => (
             <div
               key={i}
               className="flex flex-col lg:flex-row gap-8 bg-[#2a2a3d]/80 rounded-xl p-6 shadow-lg hover:shadow-xl transition backdrop-blur-md"
@@ -124,7 +132,8 @@ const MyProjects = () => {
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-[#00ffd9] text-black px-4 py-2 rounded hover:bg-opacity-80 transition text-sm"
+                    className="relative bg-[#00ffd9] text-black px-4 py-2 rounded transition text-sm font-medium
+                    hover:shadow-[0_0_5px_1px_#00ffd9] hover:scale-102 duration-300"
                   >
                     Live Demo
                   </a>
@@ -134,7 +143,6 @@ const MyProjects = () => {
           ))}
         </div>
 
-        {/* Skills */}
         <div className="text-center mb-12">
           <h2 className="text-5xl font-bold text-gradient mb-2">
             Meine Fähigkeiten
@@ -164,7 +172,6 @@ const MyProjects = () => {
           ))}
         </div>
 
-        {/* Skill modal */}
         {activeSkillIndex !== null && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-[rgba(30,30,47,0.7)] backdrop-blur-md">
             <div className="bg-[#29293a] rounded-xl p-6 relative w-full max-w-md mx-auto border border-[#00ffc6] shadow-lg">

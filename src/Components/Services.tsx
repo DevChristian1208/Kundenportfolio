@@ -5,47 +5,52 @@ const tiers = [
     name: "Starter Paket",
     id: "tier-starter",
     href: "#",
-    price: "€399",
+    price: "ab 550€",
     description:
-      "Eine einfache, moderne Landing Page, die auf allen Geräten gut aussieht.",
+      "Perfekt für den schnellen Start: eine moderne Landing Page, die Vertrauen schafft und mobil funktioniert.",
     features: [
-      "1 Landing Page",
-      "Mobilfreundlich",
-      "Kontaktformular",
-      "DSGVO & Impressum",
+      "1 Seite (Landing Page)",
+      "Mobilfreundlich & schnell",
+      "Kontaktformular integriert",
+      "Einbindung von Impressum & Datenschutzerklärung",
+      "Domain-Anbindung (Domain-Kosten trägt der Kunde)",
+      "Optional: Hosting & Pflege über mich",
     ],
-    featured: false,
   },
   {
     name: "Business Paket",
     id: "tier-business",
     href: "#",
-    price: "599€",
+    price: "ab 650€",
     description:
-      "Mehrseitige Website mit einfacher Suchmaschinenhilfe und Kontaktformular.",
+      "Für Geschäfte, Praxen und Dienstleister, die ihr Angebot umfassend präsentieren möchten – mit Startseite, Leistungen, Kontakt und mehr.",
     features: [
       "Mehrere Seiten (Start, Leistungen, Über uns, Kontakt)",
-      "Suchmaschinenfreundliche Grundstruktur",
-      "Kontaktformular",
-      "DSGVO & Impressum",
+      "Mobilfreundlich & schnell",
+      "Kontaktformular integriert",
+      "Einbindung von Impressum & Datenschutzerklärung",
+      "Domain-Anbindung (Domain-Kosten trägt der Kunde)",
+      "Optional: Hosting & Pflege über mich",
     ],
-    featured: false,
   },
   {
     name: "Premium Paket",
     id: "tier-premium",
     href: "#",
-    price: "799€",
+    price: "ab 850 €",
     description:
-      "Individuelles Design mit Animationen, Blog, Galerie und 3 Monate Wartung.",
+      "Individuelles Webprojekt mit Extras: einzigartiges Design, erweiterte Funktionen und laufende Betreuung.",
     features: [
       "Einzigartiges Design mit Animationen",
-      "Blog, Galerie oder Extras",
-      "Bessere Auffindbarkeit bei Google",
-      "3 Monate Wartung und Updates",
-      "Schnelle Ladezeiten",
+      "Mehrere Seiten (Start, Leistungen, Über uns, Kontakt)",
+      "Blog, Galerie oder individuelle Extras",
+      "Optimiert für bessere Google-Sichtbarkeit",
+      "4 Monate Wartung & Updates inklusive",
+      "Einbindung von Impressum & Datenschutzerklärung",
+      "Domain-Anbindung (Domain-Kosten trägt der Kunde)",
+      "Sehr schnelle Ladezeiten",
+      "Optional: Hosting & Pflege dauerhaft über mich",
     ],
-    featured: false,
   },
 ];
 
@@ -63,11 +68,13 @@ const Services = () => {
         <span className="text-[#ea4343] font-semibold uppercase text-sm block mb-2">
           Was ich anbiete
         </span>
-        <h2 className="text-5xl font-bold mb-4">My Services</h2>
+        <h2 className="text-5xl font-bold mb-4">Meine Pakete</h2>
         <p className="text-gray-200 max-w-3xl mx-auto mb-16 text-lg">
-          Ich erstelle professionelle Websites für kleine Unternehmen wie
-          Arztpraxen, Restaurants, Friseure oder Handwerksbetriebe. Modern,
-          mobiloptimiert, DSGVO-konform – mit klarem Fokus auf Kundennutzen.
+          Ob kleiner Betrieb oder wachsendes Unternehmen – ich biete passende
+          Weblösungen, die modern aussehen, schnell laufen und Kunden gewinnen.
+          Hosting & laufende Pflege können bei Bedarf direkt über mich gebucht
+          werden. Domains registriert der Kunde selbst, ich helfe bei der
+          Einrichtung.
         </p>
 
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -75,8 +82,7 @@ const Services = () => {
             <div
               key={tier.id}
               className={classNames(
-                tier.featured ? "bg-[#ea4343]/90" : "bg-[#00ffd9]/10",
-                "rounded-3xl p-8 flex flex-col transition-transform duration-300 hover:scale-[1.03] cursor-pointer",
+                "bg-white/5 rounded-3xl p-8 flex flex-col text-center transition-transform duration-300 hover:scale-[1.03] cursor-pointer",
                 "hover:bg-[#ea4343] hover:text-white hover:ring-0 hover:shadow-2xl"
               )}
             >
@@ -86,7 +92,6 @@ const Services = () => {
               <p className="mt-2 text-white/80 text-sm">{tier.description}</p>
               <p className="mt-4 flex items-baseline justify-center gap-x-2 font-semibold text-3xl">
                 <span>{tier.price}</span>
-                <span className="text-base text-white/60">ab</span>
               </p>
 
               <ul
@@ -96,8 +101,9 @@ const Services = () => {
                 {tier.features.map((feature) => (
                   <li
                     key={feature}
-                    className="flex gap-x-3 items-start justify-center"
+                    className="flex gap-x-2 items-start justify-center"
                   >
+                    <span className="text-[#00ffd9]">✔</span>
                     <span>{feature}</span>
                   </li>
                 ))}

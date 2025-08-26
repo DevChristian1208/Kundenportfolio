@@ -97,7 +97,9 @@ const Aboutme = ({ myname }: AboutmeProps) => {
 
           <p className="mt-4 text-sm text-gray-500">
             Starter, Business oder Premium – passende Pakete ab 399&nbsp;€.
-            Updates und Pflege jederzeit über mein Wartungs-Abo.
+            Domain-Kosten trägt der Kunde, ich unterstütze bei der Einrichtung.
+            Rechtliche Texte wie Impressum & Datenschutzerklärung werden vom
+            Kunden bereitgestellt, ich binde sie technisch ein.
           </p>
         </div>
       </div>

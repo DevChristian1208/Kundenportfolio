@@ -80,8 +80,10 @@ const Contact = () => {
         <div className="grid md:grid-cols-2 gap-12">
           <div className="space-y-6">
             <p className="text-gray-300">
-              Immer noch unsicher, ob ich die richtige Person für Ihr Projekt
-              bin? Kontaktieren Sie mich!
+              Eine neue Website ist eine wichtige Entscheidung. Deshalb biete
+              ich dir ein unverbindliches Erstgespräch an. Kontaktiere mich über
+              das Formular, per E-Mail oder telefonisch, ich freue mich auf
+              deine Anfrage.
             </p>
             <ul className="space-y-6">
               <li className="flex items-start gap-4">
