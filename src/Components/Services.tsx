@@ -13,7 +13,7 @@ const tiers = [
       "Mobilfreundlich & schnell",
       "Kontaktformular integriert",
       "Einbindung von Impressum & Datenschutzerklärung",
-      "Domain-Anbindung (Domain-Kosten trägt der Kunde)",
+      "Einrichtung Ihrer Wunsch-Domain",
       "Optional: Hosting & Pflege über mich",
     ],
   },
@@ -21,7 +21,7 @@ const tiers = [
     name: "Business Paket",
     id: "tier-business",
     href: "#",
-    price: "ab 650€",
+    price: "ab 750€",
     description:
       "Für Geschäfte, Praxen und Dienstleister, die ihr Angebot umfassend präsentieren möchten – mit Startseite, Leistungen, Kontakt und mehr.",
     features: [
@@ -29,7 +29,7 @@ const tiers = [
       "Mobilfreundlich & schnell",
       "Kontaktformular integriert",
       "Einbindung von Impressum & Datenschutzerklärung",
-      "Domain-Anbindung (Domain-Kosten trägt der Kunde)",
+      "Einrichtung Ihrer Wunsch-Domain",
       "Optional: Hosting & Pflege über mich",
     ],
   },
@@ -37,7 +37,7 @@ const tiers = [
     name: "Premium Paket",
     id: "tier-premium",
     href: "#",
-    price: "ab 850 €",
+    price: "ab 900 €",
     description:
       "Individuelles Webprojekt mit Extras: einzigartiges Design, erweiterte Funktionen und laufende Betreuung.",
     features: [
@@ -47,7 +47,7 @@ const tiers = [
       "Optimiert für bessere Google-Sichtbarkeit",
       "4 Monate Wartung & Updates inklusive",
       "Einbindung von Impressum & Datenschutzerklärung",
-      "Domain-Anbindung (Domain-Kosten trägt der Kunde)",
+      "Einrichtung Ihrer Wunsch-Domain",
       "Sehr schnelle Ladezeiten",
       "Optional: Hosting & Pflege dauerhaft über mich",
     ],

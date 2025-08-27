@@ -95,8 +95,10 @@ const MyProjects = () => {
             Meine Projekte
           </h2>
           <p className="text-[#00ffc6] text-lg">
-            Eine Auswahl von Anwendungen, die ich mit modernen Technologien
-            umgesetzt habe.
+            Die folgenden Projekte sind während meiner Weiterbildung entstanden.
+            Sie geben Einblick in meine Fähigkeiten und verdeutlichen, wie meine
+            Leidenschaft für Webentwicklung meinen Weg als Entwickler geprägt
+            hat.
           </p>
         </div>
 
