@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import Header from "@/Components/Header";
+import TrueFocus from "./TrueFocus";
 
 const HeroSection = () => {
   const imageContainerRef = useRef<HTMLDivElement>(null);
@@ -39,7 +40,6 @@ const HeroSection = () => {
 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseleave", reset);
-
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", reset);
@@ -49,37 +49,79 @@ const HeroSection = () => {
   return (
     <>
       <Header />
+
       <section
         id="home"
-        className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#3a1a1a]"
+        className="
+          relative isolate overflow-hidden overflow-x-clip
+          bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#3a1a1a]
+          min-h-screen
+          flex items-center
+        "
       >
-        <div className="absolute w-[500px] h-[500px] top-[20%] left-[5%] bg-[#ea4343] opacity-30 blur-[120px] rounded-full animate-fadePulse z-0"></div>
-        <div className="absolute w-[400px] h-[400px] bottom-[10%] right-[5%] bg-[#38bdf8] opacity-25 blur-[100px] rounded-full animate-fadePulse delay-[4s] z-0"></div>
-        <div className="max-w-7xl w-full mx-auto px-6 md:px-10 flex flex-col lg:flex-row items-center justify-between py-20 gap-14 relative z-10">
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-x-clip">
+          <div className="absolute w-[500px] h-[500px] top-[20%] left-[5%] bg-[#ea4343] opacity-30 blur-[120px] rounded-full" />
+          <div className="absolute w-[400px] h-[400px] bottom-[10%] right-[5%] bg-[#38bdf8] opacity-25 blur-[100px] rounded-full" />
+        </div>
+
+        <div
+          className="
+            relative z-10 w-full
+            mx-auto max-w-7xl px-6 md:px-10
+            grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14
+            items-center
+          "
+        >
           <div
             ref={imageContainerRef}
-            className="order-1 lg:order-none relative w-full max-w-[400px] sm:max-w-[500px] lg:max-w-[600px] h-[400px] sm:h-[500px] lg:h-[700px] transition-transform duration-300 ease-out will-change-transform"
+            className="
+              order-1 lg:order-1
+              lg:col-span-6
+              relative w-full
+              h-[420px] sm:h-[520px] lg:h-[720px]
+              transition-transform duration-300 ease-out will-change-transform
+              flex justify-center lg:justify-start
+            "
           >
-            <div className="relative w-full h-full top-[25px]">
+            <div className="relative w-full h-full">
               <Image
                 src="/file.png"
                 alt="Christian"
                 fill
-                className="object-contain"
+                priority
+                className="object-contain object-bottom select-none pointer-events-none"
               />
             </div>
           </div>
 
-          <div className="order-2 lg:order-none flex-1 text-center lg:text-left space-y-6 animate-fade-in">
+          <div
+            className="
+              order-2 lg:order-2
+              lg:col-span-6
+              flex flex-col
+              text-center lg:text-left
+              space-y-6
+              justify-center
+            "
+          >
             <h1 className="text-white text-2xl sm:text-3xl font-light">
               Hallo, ich bin
             </h1>
-            <h2 className="text-[#ea4343] text-[60px] sm:text-[80px] font-extrabold leading-none">
+
+            <h2 className="text-[#ea4343] text-[60px] sm:text-[80px] font-extrabold leading-[0.95]">
               Christian
             </h2>
-            <h3 className="text-white text-2xl sm:text-4xl font-semibold">
-              Frontend Developer
-            </h3>
+
+            <div className="text-white text-2xl sm:text-4xl font-semibold flex justify-center lg:justify-start">
+              <TrueFocus
+                sentence="Frontend Developer"
+                manualMode={false}
+                blurAmount={4}
+                borderColor="red"
+                animationDuration={2}
+                pauseBetweenAnimations={2}
+              />
+            </div>
 
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-5 pt-6">
               <a
@@ -99,45 +141,12 @@ const HeroSection = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-6 right-10 text-white text-sm md:text-base z-10">
+        <div className="absolute bottom-6 right-6 md:right-10 text-white text-sm md:text-base z-10">
           <a href="mailto:christian.pressig@web.de" className="hover:underline">
             christian.pressig@web.de
           </a>
         </div>
       </section>
-
-      <style jsx>{`
-        .animate-fade-in {
-          animation: fadeIn 1s ease-out forwards;
-        }
-
-        .animate-fadePulse {
-          animation: fadePulse 10s ease-in-out infinite;
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadePulse {
-          0%,
-          100% {
-            transform: scale(1);
-            opacity: 0.25;
-          }
-          50% {
-            transform: scale(1.08);
-            opacity: 0.4;
-          }
-        }
-      `}</style>
     </>
   );
 };

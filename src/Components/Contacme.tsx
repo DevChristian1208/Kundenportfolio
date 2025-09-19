@@ -3,15 +3,13 @@
 import Image from "next/image";
 import React, { useState } from "react";
 
-const Contact = () => {
+export default function Contact() {
   const [successMessage, setSuccessMessage] = useState("");
   const [visible, setVisible] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const form = e.target as HTMLFormElement;
-
     const formData = {
       name: (form.elements.namedItem("name") as HTMLInputElement).value,
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
@@ -26,36 +24,28 @@ const Contact = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
-      if (res.ok) {
-        const data = await res.json();
-        setSuccessMessage(data.message || "Mail wurde gesendet!");
-        setVisible(true);
-        form.reset();
-      } else {
-        const data = await res.json();
-        setSuccessMessage(data.error || "Fehler beim Senden.");
-        setVisible(true);
-      }
-    } catch (error) {
-      console.error("Fehler beim Absenden der Anfrage:", error);
+      const data = await res.json();
+      setSuccessMessage(
+        res.ok
+          ? data.message || "Mail wurde gesendet!"
+          : data.error || "Fehler beim Senden."
+      );
+      setVisible(true);
+    } catch {
       setSuccessMessage("Fehler beim Senden. Bitte versuche es später erneut.");
       setVisible(true);
     }
 
-    setTimeout(() => {
-      setVisible(false);
-    }, 1500);
-
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 2000);
+    form.reset();
+    setTimeout(() => setVisible(false), 1500);
+    setTimeout(() => setSuccessMessage(""), 2000);
   };
 
   return (
     <section
       id="contact"
-      className="bg-gradient-to-b from-[#3f3f5f] via-[#3f3f5f] to-[#3f3f5f] text-white py-24 px-4"
+      // WICHTIG: -mt-px verhindert 1-px-Seam (Anti-Aliasing)
+      className="-mt-px relative isolate bg-[linear-gradient(to_bottom,#3f3f5f_0%,#35355a_60%,#2b2b3d_100%)] text-white py-24 px-4"
     >
       {successMessage && (
         <div className="fixed bottom-16 left-0 w-full flex justify-center px-4 z-50">
@@ -74,7 +64,7 @@ const Contact = () => {
           <span className="text-[#ea4343] font-semibold uppercase text-sm block mb-2">
             Get in Touch
           </span>
-          <h2 className="text-4xl font-bold text-[60px]">Contact me</h2>
+          <h2 className="text-4xl md:text-5xl font-extrabold">Contact me</h2>
         </div>
 
         <div className="grid md:grid-cols-2 gap-12">
@@ -82,12 +72,12 @@ const Contact = () => {
             <p className="text-gray-300">
               Eine neue Website ist eine wichtige Entscheidung. Deshalb biete
               ich dir ein unverbindliches Erstgespräch an. Kontaktiere mich über
-              das Formular, per E-Mail oder telefonisch, ich freue mich auf
+              das Formular, per E-Mail oder telefonisch – ich freue mich auf
               deine Anfrage.
             </p>
             <ul className="space-y-6">
               <li className="flex items-start gap-4">
-                <Image src="./call.svg" alt="call" width={32} height={32} />
+                <Image src="/call.svg" alt="call" width={32} height={32} />
                 <div>
                   <span className="block text-sm text-gray-400">Call me</span>
                   <h3 className="text-lg font-bold">+49 1756453064</h3>
@@ -99,7 +89,7 @@ const Contact = () => {
                   <span className="block text-sm text-gray-400">Email</span>
                   <h3 className="text-lg font-bold">
                     <a
-                      href="mailto:christian@web.de"
+                      href="mailto:christian.pressig@web.de"
                       className="hover:text-[#ea4343] transition-all duration-200"
                     >
                       christian.pressig@web.de
@@ -140,7 +130,7 @@ const Contact = () => {
               rows={5}
               className="w-full bg-[#2f2f2f] p-4 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ea4343]"
               required
-            ></textarea>
+            />
 
             <button
               type="submit"
@@ -154,6 +144,4 @@ const Contact = () => {
       </div>
     </section>
   );
-};
-
-export default Contact;
+}
