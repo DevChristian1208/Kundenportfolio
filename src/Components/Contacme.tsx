@@ -44,8 +44,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      // WICHTIG: -mt-px verhindert 1-px-Seam (Anti-Aliasing)
-      className="-mt-px relative isolate bg-[linear-gradient(to_bottom,#3f3f5f_0%,#35355a_60%,#2b2b3d_100%)] text-white py-24 px-4"
+      className="-mt-px relative isolate bg-[#3f3f5f] text-white py-24 px-4"
     >
       {successMessage && (
         <div className="fixed bottom-16 left-0 w-full flex justify-center px-4 z-50">

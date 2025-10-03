@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Skill = { name: string; img: string; desc: string };
 type Project = {
@@ -73,21 +74,63 @@ const PROJECTS: Project[] = [
 
 export default function MyProjects() {
   const [active, setActive] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const lockedScrollYRef = useRef(0);
   const dialogRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    const originalTouch = document.body.style.touchAction;
+    const body = document.body;
+    const html = document.documentElement;
+
+    const original = {
+      overflow: body.style.overflow,
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      touchAction: body.style.touchAction,
+      paddingRight: body.style.paddingRight,
+      scrollBehavior: html.style.scrollBehavior,
+    };
+
     if (active !== null) {
-      document.body.style.overflow = "hidden";
-      document.body.style.touchAction = "none";
-    } else {
-      document.body.style.overflow = originalOverflow || "";
-      document.body.style.touchAction = originalTouch || "";
+      // Header ausblenden (für beliebige Header-Implementationen)
+      html.setAttribute("data-skill-dialog", "open");
+
+      // aktuelle Scrollposition sichern
+      lockedScrollYRef.current = window.scrollY || window.pageYOffset;
+
+      // Scrollbar-Breite kompensieren, um Layout-Shift zu vermeiden
+      const scrollbarComp = window.innerWidth - html.clientWidth;
+      if (scrollbarComp > 0) {
+        body.style.paddingRight = `${scrollbarComp}px`;
+      }
+
+      // Body fixieren (funktioniert zuverlässig auf iOS/Safari)
+      body.style.overflow = "hidden";
+      body.style.position = "fixed";
+      body.style.top = `-${lockedScrollYRef.current}px`;
+      body.style.width = "100%";
+      body.style.touchAction = "none";
     }
+
     return () => {
-      document.body.style.overflow = originalOverflow || "";
-      document.body.style.touchAction = originalTouch || "";
+      if (active !== null) {
+        html.style.scrollBehavior = "auto";
+        body.style.overflow = original.overflow || "";
+        body.style.position = original.position || "";
+        body.style.width = original.width || "";
+        body.style.touchAction = original.touchAction || "";
+        body.style.paddingRight = original.paddingRight || "";
+        body.style.top = original.top || "";
+        window.scrollTo({ top: lockedScrollYRef.current, left: 0 });
+
+        requestAnimationFrame(() => {
+          html.style.scrollBehavior = original.scrollBehavior || "";
+          html.removeAttribute("data-skill-dialog");
+        });
+      }
     };
   }, [active]);
 
@@ -100,8 +143,22 @@ export default function MyProjects() {
   return (
     <section
       id="portfolio"
-      className="relative isolate text-slate-800 bg-gradient-to-b from-white via-[#f1f5ff] to-[#3f3f5f]"
+      className="relative text-slate-800 bg-[linear-gradient(to_bottom,_#ffffff_0%,_#f1f5ff_100%)]"
     >
+      {/* Header bei geöffnetem Dialog ausblenden (robust: header, Banner, und häufige Klassen) */}
+      <style jsx global>{`
+        html[data-skill-dialog="open"] header,
+        html[data-skill-dialog="open"] [role="banner"],
+        html[data-skill-dialog="open"] .site-header,
+        html[data-skill-dialog="open"] nav.site-header {
+          opacity: 0 !important;
+          pointer-events: none !important;
+          transform: translateY(-8px);
+          transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+      `}</style>
+
+      {/* dezente Aurora */}
       <div className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(closest-side,white,transparent)]">
         <div className="absolute -top-24 -left-16 h-[40rem] w-[40rem] rounded-full bg-[conic-gradient(from_180deg,rgba(99,102,241,.25),rgba(236,72,153,.2),rgba(56,189,248,.2),rgba(99,102,241,.25))] blur-3xl animate-[aurora_14s_ease-in-out_infinite]" />
         <div className="absolute -bottom-28 -right-24 h-[36rem] w-[36rem] rounded-full bg-[conic-gradient(from_90deg,rgba(56,189,248,.18),rgba(99,102,241,.18),rgba(16,185,129,.18),rgba(56,189,248,.18))] blur-3xl animate-[aurora_16s_ease-in-out_infinite_reverse]" />
@@ -119,6 +176,7 @@ export default function MyProjects() {
             hat.
           </p>
         </div>
+
         <div className="mt-14 grid gap-10">
           {PROJECTS.map((p, i) => (
             <article
@@ -129,26 +187,15 @@ export default function MyProjects() {
               <div className="pointer-events-none absolute inset-0 rounded-3xl p-[1px] [mask:linear-gradient(#000,#000)_content-box,linear-gradient(#000,#000)] [mask-composite:exclude] before:absolute before:inset-0 before:-z-10 before:rounded-3xl before:bg-[conic-gradient(from_180deg_at_50%_50%,#ef4444_0%,#3b82f6_25%,#22c55e_50%,#a855f7_75%,#ef4444_100%)] before:opacity-[0.18] group-hover:before:opacity-30 before:transition-opacity" />
 
               <div className="relative order-2 md:order-1 [transform-style:preserve-3d] group-hover:[transform:rotateX(1.5deg)_rotateY(-2.5deg)] transition-transform duration-500">
-                <div className="relative overflow-hidden rounded-2xl ring-1 ring-slate-200/70 bg-white">
-                  <div className="flex items-center gap-1 px-4 pt-3 pb-2">
-                    <span className="size-2 rounded-full bg-red-400/90" />
-                    <span className="size-2 rounded-full bg-yellow-400/90" />
-                    <span className="size-2 rounded-full bg-green-400/90" />
-                    <span className="ml-3 text-xs text-slate-400">
-                      Vorschau
-                    </span>
-                  </div>
-                  <div className="border-t border-slate-200">
-                    <Image
-                      src={p.img}
-                      alt={p.title}
-                      width={1280}
-                      height={720}
-                      className="h-[280px] w-full md:h-[250px]"
-                      priority={i === 0}
-                    />
-                  </div>
-
+                <div className="flex items-center relative overflow-hidden rounded-2xl ring-1 ring-slate-200/70 bg-white max-w-lg">
+                  <Image
+                    src={p.img}
+                    alt={p.title}
+                    width={1280}
+                    height={720}
+                    className="h-[280px] w-full md:h-[250px]"
+                    priority={i === 0}
+                  />
                   <span className="pointer-events-none absolute inset-y-0 -left-[55%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-0 transition duration-700 group-hover:left-[115%] group-hover:opacity-100" />
                 </div>
               </div>
@@ -177,7 +224,7 @@ export default function MyProjects() {
                     className="relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-[1px] hover:shadow-[0_12px_30px_-6px_rgba(79,70,229,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
                   >
                     Live&nbsp;Demo
-                    <span className="pointer-events-none absolute inset-y-0 -left-[60%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 transition duration-700 hover:left-[110%] hover:opacity-100" />
+                    <span className="pointer-events-none absolute inset-y-0 -left-[60%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 transition duration-700 group-hover:left-[110%] group-hover:opacity-100" />
                   </Link>
                 </div>
               </div>
@@ -200,10 +247,12 @@ export default function MyProjects() {
             <button
               key={s.name}
               onClick={() => setActive(idx)}
-              className="group relative rounded-2xl border border-slate-200 bg-white/85 p-4 text-center shadow-sm backdrop-blur transition hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white/85 p-4 text-center shadow-sm backdrop-blur transition hover:scale-[1.02] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
               aria-haspopup="dialog"
               aria-controls="skill-dialog"
             >
+              <span className="pointer-events-none absolute inset-0 rounded-2xl p-[1px] [mask:linear-gradient(#000,#000)_content-box,linear-gradient(#000,#000)] [mask-composite:exclude] before:absolute before:inset-0 before:-z-10 before:rounded-2xl before:bg-[conic-gradient(from_180deg,rgba(99,102,241,.18),rgba(236,72,153,.18),rgba(56,189,248,.18),rgba(99,102,241,.18))] before:opacity-[0.1] group-hover:before:opacity-100 before:transition-opacity" />
+
               <div className="mx-auto grid place-items-center size-16 rounded-xl bg-slate-50 ring-1 ring-slate-200">
                 <img
                   src={s.img}
@@ -212,64 +261,52 @@ export default function MyProjects() {
                 />
               </div>
               <p className="mt-2 text-sm font-medium">{s.name}</p>
-              <span className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition group-hover:opacity-100 [background:radial-gradient(600px_120px_at_50%_0%,rgba(99,102,241,.15),transparent)]" />
+
+              <span className="pointer-events-none absolute inset-y-0 -left-[55%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-0 transition duration-700 group-hover:left-[115%] group-hover:opacity-100" />
             </button>
           ))}
         </div>
       </div>
 
-      {active !== null && (
-        <div
-          ref={dialogRef}
-          id="skill-dialog"
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 grid place-items-center bg-black/35 px-4 backdrop-blur-sm"
-          onClick={(e) => {
-            if (e.target === dialogRef.current) setActive(null);
-          }}
-        >
-          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
-            <div className="flex items-start gap-4">
-              <img
-                src={SKILLS[active].img}
-                alt={SKILLS[active].name}
-                className="h-12 w-12"
-              />
-              <div>
-                <h3 className="text-xl font-semibold text-slate-900">
-                  {SKILLS[active].name}
-                </h3>
-                <p className="mt-2 text-sm text-slate-700">
-                  {SKILLS[active].desc}
-                </p>
+      {mounted &&
+        active !== null &&
+        createPortal(
+          <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            className="fixed inset-0 z-[9999] grid place-items-center bg-black/40 px-4 backdrop-blur-sm"
+            onClick={(e) => {
+              if (e.target === dialogRef.current) setActive(null);
+            }}
+          >
+            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
+              <div className="flex items-start gap-4">
+                <img
+                  src={SKILLS[active].img}
+                  alt={SKILLS[active].name}
+                  className="h-12 w-12"
+                />
+                <div>
+                  <h3 className="text-xl font-semibold text-slate-900">
+                    {SKILLS[active].name}
+                  </h3>
+                  <p className="mt-2 text-sm text-slate-700">
+                    {SKILLS[active].desc}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setActive(null)}
+                  aria-label="Dialog schließen"
+                  className="ml-auto rounded-lg px-2 py-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+                >
+                  ✕
+                </button>
               </div>
-              <button
-                onClick={() => setActive(null)}
-                aria-label="Dialog schließen"
-                className="ml-auto rounded-lg px-2 py-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800"
-              >
-                ✕
-              </button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Keyframes */}
-      <style jsx global>{`
-        @keyframes aurora {
-          0% {
-            transform: translateY(0) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-10px) rotate(2deg);
-          }
-          100% {
-            transform: translateY(0) rotate(0deg);
-          }
-        }
-      `}</style>
+          </div>,
+          document.body
+        )}
     </section>
   );
 }
