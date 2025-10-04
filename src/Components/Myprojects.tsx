@@ -60,7 +60,7 @@ const PROJECTS: Project[] = [
     stack: "Next.JS | Tailwind | Firebase",
     desc: "Mit DaBubble können sich Nutzer anmelden, Channels erstellen und Direktnachrichten verschicken. Die Anwendung ermöglicht eine einfache Teamkommunikation in Echtzeit und orientiert sich am Prinzip von Slack.",
     github: "https://github.com/deinlink",
-    demo: "https://elpolloloco.christianseidel-developer.de",
+    demo: "https://dabubble.christianseidel-developer.de",
   },
   {
     title: "El Pollo Loco",
@@ -95,19 +95,14 @@ export default function MyProjects() {
     };
 
     if (active !== null) {
-      // Header ausblenden (für beliebige Header-Implementationen)
       html.setAttribute("data-skill-dialog", "open");
-
-      // aktuelle Scrollposition sichern
       lockedScrollYRef.current = window.scrollY || window.pageYOffset;
 
-      // Scrollbar-Breite kompensieren, um Layout-Shift zu vermeiden
       const scrollbarComp = window.innerWidth - html.clientWidth;
       if (scrollbarComp > 0) {
         body.style.paddingRight = `${scrollbarComp}px`;
       }
 
-      // Body fixieren (funktioniert zuverlässig auf iOS/Safari)
       body.style.overflow = "hidden";
       body.style.position = "fixed";
       body.style.top = `-${lockedScrollYRef.current}px`;
@@ -145,7 +140,6 @@ export default function MyProjects() {
       id="portfolio"
       className="relative text-slate-800 bg-[linear-gradient(to_bottom,_#ffffff_0%,_#f1f5ff_100%)]"
     >
-      {/* Header bei geöffnetem Dialog ausblenden (robust: header, Banner, und häufige Klassen) */}
       <style jsx global>{`
         html[data-skill-dialog="open"] header,
         html[data-skill-dialog="open"] [role="banner"],
@@ -158,13 +152,12 @@ export default function MyProjects() {
         }
       `}</style>
 
-      {/* dezente Aurora */}
       <div className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(closest-side,white,transparent)]">
         <div className="absolute -top-24 -left-16 h-[40rem] w-[40rem] rounded-full bg-[conic-gradient(from_180deg,rgba(99,102,241,.25),rgba(236,72,153,.2),rgba(56,189,248,.2),rgba(99,102,241,.25))] blur-3xl animate-[aurora_14s_ease-in-out_infinite]" />
         <div className="absolute -bottom-28 -right-24 h-[36rem] w-[36rem] rounded-full bg-[conic-gradient(from_90deg,rgba(56,189,248,.18),rgba(99,102,241,.18),rgba(16,185,129,.18),rgba(56,189,248,.18))] blur-3xl animate-[aurora_16s_ease-in-out_infinite_reverse]" />
       </div>
 
-      <div className="container mx-auto px-4 py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
             Meine Projekte
@@ -186,20 +179,25 @@ export default function MyProjects() {
             >
               <div className="pointer-events-none absolute inset-0 rounded-3xl p-[1px] [mask:linear-gradient(#000,#000)_content-box,linear-gradient(#000,#000)] [mask-composite:exclude] before:absolute before:inset-0 before:-z-10 before:rounded-3xl before:bg-[conic-gradient(from_180deg_at_50%_50%,#ef4444_0%,#3b82f6_25%,#22c55e_50%,#a855f7_75%,#ef4444_100%)] before:opacity-[0.18] group-hover:before:opacity-30 before:transition-opacity" />
 
+              {/* Bild-Spalte */}
               <div className="relative order-2 md:order-1 [transform-style:preserve-3d] group-hover:[transform:rotateX(1.5deg)_rotateY(-2.5deg)] transition-transform duration-500">
-                <div className="flex items-center relative overflow-hidden rounded-2xl ring-1 ring-slate-200/70 bg-white max-w-lg">
-                  <Image
-                    src={p.img}
-                    alt={p.title}
-                    width={1280}
-                    height={720}
-                    className="h-[280px] w-full md:h-[250px]"
-                    priority={i === 0}
-                  />
+                <div className="relative overflow-hidden rounded-2xl ring-1 ring-slate-200/70 bg-white/90">
+                  {/* feste 16:9 ratio, kein Verzerren auf lg */}
+                  <div className="relative w-full aspect-[16/9]">
+                    <Image
+                      src={p.img}
+                      alt={p.title}
+                      fill
+                      sizes="(min-width: 1280px) 640px, (min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
+                      priority={i === 0}
+                      className="object-contain"
+                    />
+                  </div>
                   <span className="pointer-events-none absolute inset-y-0 -left-[55%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-0 transition duration-700 group-hover:left-[115%] group-hover:opacity-100" />
                 </div>
               </div>
 
+              {/* Text-Spalte */}
               <div className="order-1 md:order-2 flex flex-col">
                 <header>
                   <h3 className="text-2xl md:text-3xl font-bold">{p.title}</h3>

@@ -12,6 +12,17 @@ const HeroSection = () => {
     const container = imageContainerRef.current;
     if (!container) return;
 
+    const isDesktopPointerFine =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(pointer: fine)").matches &&
+      window.innerWidth >= 1024;
+
+    if (!isDesktopPointerFine) {
+      container.style.transform = "";
+      return;
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
@@ -55,30 +66,32 @@ const HeroSection = () => {
         className="
           relative isolate overflow-hidden overflow-x-clip
           bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#3a1a1a]
-          min-h-screen
+          min-h-[100svh]
           flex items-center
+          py-16 sm:py-20 lg:py-24
         "
       >
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-x-clip">
-          <div className="absolute w-[500px] h-[500px] top-[20%] left-[5%] bg-[#ea4343] opacity-30 blur-[120px] rounded-full" />
-          <div className="absolute w-[400px] h-[400px] bottom-[10%] right-[5%] bg-[#38bdf8] opacity-25 blur-[100px] rounded-full" />
+          <div className="absolute w-[420px] h-[420px] top-[18%] left-[4%] bg-[#ea4343] opacity-30 blur-[120px] rounded-full" />
+          <div className="absolute w-[360px] h-[360px] bottom-[8%] right-[4%] bg-[#38bdf8] opacity-25 blur-[100px] rounded-full" />
         </div>
 
         <div
           className="
             relative z-10 w-full
-            mx-auto max-w-7xl px-6 md:px-10
-            grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14
+            mx-auto max-w-7xl px-4 sm:px-6 lg:px-8
+            grid grid-cols-1 lg:grid-cols-12
+            gap-y-12 gap-x-8 lg:gap-x-14
             items-center
           "
         >
           <div
             ref={imageContainerRef}
             className="
-              order-1 lg:order-1
+              order-1
               lg:col-span-6
               relative w-full
-              h-[420px] sm:h-[520px] lg:h-[720px]
+              h-[320px] sm:h-[420px] md:h-[520px] lg:h-[620px] xl:h-[700px]
               transition-transform duration-300 ease-out will-change-transform
               flex justify-center lg:justify-start
             "
@@ -96,23 +109,23 @@ const HeroSection = () => {
 
           <div
             className="
-              order-2 lg:order-2
+              order-2
               lg:col-span-6
               flex flex-col
               text-center lg:text-left
-              space-y-6
               justify-center
+              space-y-4 sm:space-y-6
             "
           >
-            <h1 className="text-white text-2xl sm:text-3xl font-light">
+            <h1 className="text-white text-lg sm:text-xl font-light">
               Hallo, ich bin
             </h1>
 
-            <h2 className="text-[#ea4343] text-[60px] sm:text-[80px] font-extrabold leading-[0.95]">
+            <h2 className="text-[#ea4343] text-5xl sm:text-6xl md:text-7xl font-extrabold leading-[0.95]">
               Christian
             </h2>
 
-            <div className="text-white text-2xl sm:text-4xl font-semibold flex justify-center lg:justify-start">
+            <div className="text-white text-2xl sm:text-4xl md:text-5xl font-semibold flex justify-center lg:justify-start">
               <TrueFocus
                 sentence="Frontend Developer"
                 manualMode={false}
@@ -123,10 +136,10 @@ const HeroSection = () => {
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-5 pt-6">
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4 sm:gap-5 pt-4 sm:pt-6">
               <a
                 href="#contact"
-                className="bg-[#ea4343] hover:bg-transparent text-white hover:text-[#ea4343] border-2 border-[#ea4343] px-8 py-3 rounded-lg font-semibold transition-all flex items-center gap-2"
+                className="bg-[#ea4343] hover:bg-transparent text-white hover:text-[#ea4343] border-2 border-[#ea4343] px-7 sm:px-8 py-3 rounded-lg font-semibold transition-all flex items-center gap-2"
               >
                 Say Hello
                 <Image src="/message.svg" alt="" width={16} height={16} />
@@ -138,10 +151,19 @@ const HeroSection = () => {
                 About Me
               </a>
             </div>
+
+            <div className="sm:hidden block text-xs text-slate-300 pt-2">
+              <a
+                href="mailto:christian.pressig@web.de"
+                className="hover:underline"
+              >
+                christian.pressig@web.de
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="absolute bottom-6 right-6 md:right-10 text-white text-sm md:text-base z-10">
+        <div className="hidden lg:block absolute bottom-6 right-6 xl:right-10 text-white text-sm md:text-base z-10">
           <a href="mailto:christian.pressig@web.de" className="hover:underline">
             christian.pressig@web.de
           </a>
