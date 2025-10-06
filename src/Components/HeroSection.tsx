@@ -1,59 +1,104 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "@/Components/Header";
 import TrueFocus from "./TrueFocus";
 
 const HeroSection = () => {
   const imageContainerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
 
+  // No-Anim CSS einmalig injizieren und im nächsten Frame mounten
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.setAttribute("data-id", "no-anim-style");
+    style.textContent = `
+      .no-anim, .no-anim * { animation: none !important; transition: none !important; }
+      @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    const raf = requestAnimationFrame(() => setMounted(true));
+    return () => {
+      cancelAnimationFrame(raf);
+      // Style kann drinbleiben; falls du aufräumen willst:
+      // document.head.removeChild(style);
+    };
+  }, []);
+
+  // Parallax/Tilt nur auf Desktop mit feinem Pointer
   useEffect(() => {
     const container = imageContainerRef.current;
     if (!container) return;
 
     const isDesktopPointerFine =
       typeof window !== "undefined" &&
-      window.matchMedia &&
+      typeof window.matchMedia === "function" &&
       window.matchMedia("(pointer: fine)").matches &&
       window.innerWidth >= 1024;
 
     if (!isDesktopPointerFine) {
-      container.style.transform = "";
+      container.style.transform =
+        "translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg)";
       return;
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const xPercent = (e.clientX / vw - 0.5) * 2;
-      const yPercent = (e.clientY / vh - 0.5) * 2;
+    let frameId: number | null = null;
 
-      const offsetX = xPercent * 15;
-      const offsetY = yPercent * 15;
-      const rotateX = yPercent * -5;
-      const rotateY = xPercent * 5;
+    const updateTransform = (e: MouseEvent) => {
+      if (frameId) cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(() => {
+        const vw = window.innerWidth || 1;
+        const vh = window.innerHeight || 1;
+        const xPercent = (e.clientX / vw - 0.5) * 2;
+        const yPercent = (e.clientY / vh - 0.5) * 2;
 
-      container.style.transform = `
-        translate(${offsetX}px, ${offsetY}px)
-        scale(1.02)
-        rotateX(${rotateX}deg)
-        rotateY(${rotateY}deg)
-      `;
+        const offsetX = xPercent * 15;
+        const offsetY = yPercent * 15;
+        const rotateX = yPercent * -5;
+        const rotateY = xPercent * 5;
+
+        container.style.transform =
+          "translate(" +
+          offsetX +
+          "px, " +
+          offsetY +
+          "px) " +
+          "scale(1.02) " +
+          "rotateX(" +
+          rotateX +
+          "deg) " +
+          "rotateY(" +
+          rotateY +
+          "deg)";
+      });
     };
 
     const reset = () => {
-      if (imageContainerRef.current) {
-        imageContainerRef.current.style.transform =
-          "translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg)";
-      }
+      if (!imageContainerRef.current) return;
+      imageContainerRef.current.style.transform =
+        "translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg)";
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    const handleResize = () => reset();
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") reset();
+    };
+
+    window.addEventListener("mousemove", updateTransform);
     window.addEventListener("mouseleave", reset);
+    window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibility);
+
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      if (frameId) cancelAnimationFrame(frameId);
+      window.removeEventListener("mousemove", updateTransform);
       window.removeEventListener("mouseleave", reset);
+      window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
 
@@ -108,14 +153,12 @@ const HeroSection = () => {
           </div>
 
           <div
-            className="
-              order-2
-              lg:col-span-6
-              flex flex-col
-              text-center lg:text-left
-              justify-center
-              space-y-4 sm:space-y-6
-            "
+            className={[
+              mounted ? "" : "no-anim",
+              "order-2 lg:col-span-6 flex flex-col text-center lg:text-left justify-center space-y-4 sm:space-y-6",
+            ]
+              .join(" ")
+              .trim()}
           >
             <h1 className="text-white text-lg sm:text-xl font-light">
               Hallo, ich bin
@@ -128,7 +171,7 @@ const HeroSection = () => {
             <div className="text-white text-2xl sm:text-4xl md:text-5xl font-semibold flex justify-center lg:justify-start">
               <TrueFocus
                 sentence="Frontend Developer"
-                manualMode={false}
+                manualMode={true}
                 blurAmount={4}
                 borderColor="red"
                 animationDuration={2}

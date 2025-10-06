@@ -197,7 +197,6 @@ export default function MyProjects() {
                 </div>
               </div>
 
-              {/* Text-Spalte */}
               <div className="order-1 md:order-2 flex flex-col">
                 <header>
                   <h3 className="text-2xl md:text-3xl font-bold">{p.title}</h3>
@@ -211,7 +210,7 @@ export default function MyProjects() {
                   <Link
                     href={p.github}
                     target="_blank"
-                    className="inline-flex items-center gap-2 rounded-xl border border-slate-300/90 bg-white px-4 py-2 text-sm text-slate-800 shadow-sm transition hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-300/90 bg-white px-4 py-2 text-sm text-slate-800 shadow-sm transition hover:-translate-y-[1px]"
                   >
                     GitHub
                   </Link>
@@ -222,7 +221,7 @@ export default function MyProjects() {
                     className="relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-[1px] hover:shadow-[0_12px_30px_-6px_rgba(79,70,229,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
                   >
                     Live&nbsp;Demo
-                    <span className="pointer-events-none absolute inset-y-0 -left-[60%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 transition duration-700 group-hover:left-[110%] group-hover:opacity-100" />
+                    <span className="pointer-events-none absolute inset-y-0 -left-[60%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 transition duration-700" />
                   </Link>
                 </div>
               </div>
