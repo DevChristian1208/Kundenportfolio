@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
+
 type AboutmeProps = {
   myname: string;
 };
 
 const Aboutme = ({ myname }: AboutmeProps) => {
   return (
-    <section id="about" className="w-full bg-white">
+    <section id="about" className="relative w-full bg-white">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-10 lg:gap-12">
           <div className="order-2 lg:order-1 lg:col-span-5 flex justify-center lg:justify-start">
@@ -90,12 +91,6 @@ const Aboutme = ({ myname }: AboutmeProps) => {
                 className="inline-flex justify-center items-center rounded-xl bg-rose-500 px-5 py-3 text-white text-sm font-semibold shadow-sm hover:bg-rose-600 transition-colors w-full sm:w-auto"
               >
                 Kostenloses Erstgespräch
-              </a>
-              <a
-                href="#portfolio"
-                className="inline-flex justify-center items-center rounded-xl px-5 py-3 text-sm font-semibold text-gray-700 ring-1 ring-gray-200 hover:bg-gray-50 transition-colors w-full sm:w-auto"
-              >
-                Arbeiten ansehen
               </a>
             </div>
 

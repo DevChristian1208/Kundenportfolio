@@ -57,17 +57,25 @@ const PROJECTS: Project[] = [
   {
     title: "DABubble",
     img: "/DaBubble.png",
-    stack: "Next.JS | Tailwind | Firebase",
+    stack: "Next.JS | React | Tailwind | Firebase",
     desc: "Mit DaBubble können sich Nutzer anmelden, Channels erstellen und Direktnachrichten verschicken. Die Anwendung ermöglicht eine einfache Teamkommunikation in Echtzeit und orientiert sich am Prinzip von Slack.",
-    github: "https://github.com/deinlink",
+    github: "https://github.com/DevChristian1208/DaBubble",
     demo: "https://dabubble.christianseidel-developer.de",
+  },
+  {
+    title: "TaskFlow",
+    img: "/TaskFlow2.png",
+    stack: "Next.JS | React | Tailwind | Firebase",
+    desc: "TaskFlow ist eine moderne Aufgaben- und Team-Management-App. Sie kombiniert To-Do-Listen, Board-Workflow (Kanban) und Contact-/Team-Verwaltung in einer Oberfläche.",
+    github: "https://github.com/DevChristian1208/myapp",
+    demo: "https://taskflow.christianseidel-developer.de/Login",
   },
   {
     title: "El Pollo Loco",
     img: "/startscreen_1.png",
     stack: "JavaScript | HTML | CSS | OOP",
     desc: "Ein Jump’n’Run-Spiel mit klassischer Objektorientierung. Spielfigur Pepe kämpft gegen die verrückte Henne.",
-    github: "https://github.com/deinlink",
+    github: "https://github.com/DevChristian1208/elpolloloco",
     demo: "https://elpolloloco.christianseidel-developer.de",
   },
 ];
@@ -138,7 +146,7 @@ export default function MyProjects() {
   return (
     <section
       id="portfolio"
-      className="relative text-slate-800 bg-[linear-gradient(to_bottom,_#ffffff_0%,_#f1f5ff_100%)]"
+      className="relative isolate overflow-hidden text-slate-800 bg-[linear-gradient(to_bottom,_#ffffff_0%,_#f1f5ff_100%)]"
     >
       <style jsx global>{`
         html[data-skill-dialog="open"] header,
@@ -153,9 +161,20 @@ export default function MyProjects() {
       `}</style>
 
       <div className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(closest-side,white,transparent)]">
-        <div className="absolute -top-24 -left-16 h-[40rem] w-[40rem] rounded-full bg-[conic-gradient(from_180deg,rgba(99,102,241,.25),rgba(236,72,153,.2),rgba(56,189,248,.2),rgba(99,102,241,.25))] blur-3xl animate-[aurora_14s_ease-in-out_infinite]" />
-        <div className="absolute -bottom-28 -right-24 h-[36rem] w-[36rem] rounded-full bg-[conic-gradient(from_90deg,rgba(56,189,248,.18),rgba(99,102,241,.18),rgba(16,185,129,.18),rgba(56,189,248,.18))] blur-3xl animate-[aurora_16s_ease-in-out_infinite_reverse]" />
+        <div className="absolute -top-28 -left-16 h-[44rem] w-[44rem] rounded-full bg-[conic-gradient(from_180deg,rgba(99,102,241,.34),rgba(236,72,153,.28),rgba(56,189,248,.28),rgba(99,102,241,.34))] blur-2xl animate-[aurora_14s_ease-in-out_infinite]" />
+        <div className="absolute -bottom-32 -right-24 h-[40rem] w-[40rem] rounded-full bg-[conic-gradient(from_90deg,rgba(56,189,248,.26),rgba(99,102,241,.26),rgba(16,185,129,.26),rgba(56,189,248,.26))] blur-2xl animate-[aurora_16s_ease-in-out_infinite_reverse]" />
       </div>
+
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 opacity-65"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(2,6,23,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(2,6,23,.07) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+          maskImage:
+            "linear-gradient(to bottom, transparent 0%, white 25%, white 100%)",
+        }}
+      />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center max-w-3xl mx-auto">
@@ -179,10 +198,8 @@ export default function MyProjects() {
             >
               <div className="pointer-events-none absolute inset-0 rounded-3xl p-[1px] [mask:linear-gradient(#000,#000)_content-box,linear-gradient(#000,#000)] [mask-composite:exclude] before:absolute before:inset-0 before:-z-10 before:rounded-3xl before:bg-[conic-gradient(from_180deg_at_50%_50%,#ef4444_0%,#3b82f6_25%,#22c55e_50%,#a855f7_75%,#ef4444_100%)] before:opacity-[0.18] group-hover:before:opacity-30 before:transition-opacity" />
 
-              {/* Bild-Spalte */}
               <div className="relative order-2 md:order-1 [transform-style:preserve-3d] group-hover:[transform:rotateX(1.5deg)_rotateY(-2.5deg)] transition-transform duration-500">
                 <div className="relative overflow-hidden rounded-2xl ring-1 ring-slate-200/70 bg-white/90">
-                  {/* feste 16:9 ratio, kein Verzerren auf lg */}
                   <div className="relative w-full aspect-[16/9]">
                     <Image
                       src={p.img}
@@ -304,6 +321,8 @@ export default function MyProjects() {
           </div>,
           document.body
         )}
+
+      <div className="pointer-events-none absolute bottom-0 inset-x-0 h-32 -z-10 bg-gradient-to-b from-transparent to-[#f7f9ff]" />
     </section>
   );
 }

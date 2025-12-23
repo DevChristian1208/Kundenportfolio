@@ -44,8 +44,10 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="-mt-px relative isolate bg-[#3f3f5f] text-white py-24 px-4"
+      className="relative isolate bg-[#2e2e48] text-white py-24 px-4"
     >
+      <div className="pointer-events-none absolute -top-24 inset-x-0 h-24 bg-gradient-to-t from-[#2e2e48] to-transparent" />
+
       {successMessage && (
         <div className="fixed bottom-16 left-0 w-full flex justify-center px-4 z-50">
           <div
@@ -67,13 +69,13 @@ export default function Contact() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-12">
-          <div className="space-y-6">
-            <p className="text-gray-300">
-              Eine neue Website ist eine wichtige Entscheidung. Deshalb biete
-              ich dir ein unverbindliches Erstgespräch an. Kontaktiere mich über
-              das Formular, per E-Mail oder telefonisch – ich freue mich auf
-              deine Anfrage.
+          <div className="space-y-6 text-gray-300">
+            <p>
+              Eine neue Website ist eine wichtige Entscheidung. Kontaktiere mich
+              für ein unverbindliches Erstgespräch – ich freue mich auf deine
+              Nachricht.
             </p>
+
             <ul className="space-y-6">
               <li className="flex items-start gap-4">
                 <Image src="/call.svg" alt="call" width={32} height={32} />
@@ -82,6 +84,7 @@ export default function Contact() {
                   <h3 className="text-lg font-bold">+49 1756453064</h3>
                 </div>
               </li>
+
               <li className="flex items-start gap-4">
                 <Image src="/message.svg" alt="email" width={32} height={32} />
                 <div>
@@ -108,6 +111,7 @@ export default function Contact() {
                 className="bg-[#2f2f2f] p-4 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ea4343]"
                 required
               />
+
               <input
                 name="email"
                 type="email"
@@ -115,6 +119,7 @@ export default function Contact() {
                 className="bg-[#2f2f2f] p-4 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ea4343]"
                 required
               />
+
               <input
                 name="phone"
                 type="tel"
