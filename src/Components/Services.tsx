@@ -104,11 +104,9 @@ export default function Services() {
           </p>
 
           <p className="mt-6 text-slate-700">
-            Auf Baukastensysteme wie <strong>WordPress</strong> oder{" "}
-            <strong>Wix</strong>
-            verzichte ich bewusst. Die Umsetzung erfolgt mit{" "}
-            <strong>Next.js</strong> für hohe Performance, Sicherheit und
-            langfristige Wartbarkeit.
+            Auf Baukastensysteme wie WordPress oder Wix verzichte ich bewusst.
+            Die Umsetzung erfolgt mit Next.js für hohe Performance, Sicherheit
+            und langfristige Wartbarkeit.
           </p>
         </div>
 
