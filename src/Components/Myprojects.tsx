@@ -2,18 +2,23 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 type Skill = { name: string; img: string; desc: string };
 type Project = {
   title: string;
-  img: string;
+  images: string[];
   stack: string;
   desc: string;
   github: string;
   demo: string;
 };
+
+/* =======================
+   DATA
+======================= */
 
 const SKILLS: Skill[] = [
   {
@@ -56,7 +61,7 @@ const SKILLS: Skill[] = [
 const PROJECTS: Project[] = [
   {
     title: "DABubble",
-    img: "/DaBubble.png",
+    images: ["/DaBubble.png", "/1.png", "/2.png"],
     stack: "Next.JS | React | Tailwind | Firebase",
     desc: "Mit DaBubble können sich Nutzer anmelden, Channels erstellen und Direktnachrichten verschicken. Die Anwendung ermöglicht eine einfache Teamkommunikation in Echtzeit und orientiert sich am Prinzip von Slack.",
     github: "https://github.com/DevChristian1208/DaBubble",
@@ -64,7 +69,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: "TaskFlow",
-    img: "/TaskFlow2.png",
+    images: ["/TaskFlow2.png", "/TaskFlow1.png", "/TaskFlow3.png"],
     stack: "Next.JS | React | Tailwind | Firebase",
     desc: "TaskFlow ist eine moderne Aufgaben- und Team-Management-App. Sie kombiniert To-Do-Listen, Board-Workflow (Kanban) und Contact-/Team-Verwaltung in einer Oberfläche.",
     github: "https://github.com/DevChristian1208/myapp",
@@ -72,7 +77,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: "El Pollo Loco",
-    img: "/startscreen_1.png",
+    images: ["/startscreen_1.png"],
     stack: "JavaScript | HTML | CSS | OOP",
     desc: "Ein Jump’n’Run-Spiel mit klassischer Objektorientierung. Spielfigur Pepe kämpft gegen die verrückte Henne.",
     github: "https://github.com/DevChristian1208/elpolloloco",
@@ -80,86 +85,104 @@ const PROJECTS: Project[] = [
   },
 ];
 
-export default function MyProjects() {
-  const [active, setActive] = useState<number | null>(null);
-  const [mounted, setMounted] = useState(false);
-  const lockedScrollYRef = useRef(0);
-  const dialogRef = useRef<HTMLDivElement>(null);
+/* =======================
+   SMALL UTILITIES
+======================= */
 
-  useEffect(() => setMounted(true), []);
+function clampModulo(n: number, max: number) {
+  return (n + max) % max;
+}
 
+/**
+ * Minimaler, robuster Scroll-Lock für Modals:
+ * - Fixiert den Body
+ * - Restores Scrollposition sauber
+ * - optional: scrollbar compensation (damit nix "springt")
+ */
+function useBodyScrollLock(locked: boolean) {
   useEffect(() => {
-    const body = document.body;
-    const html = document.documentElement;
+    if (!locked) return;
 
-    const original = {
-      overflow: body.style.overflow,
+    const html = document.documentElement;
+    const body = document.body;
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    const prev = {
       position: body.style.position,
       top: body.style.top,
       width: body.style.width,
-      touchAction: body.style.touchAction,
+      overflow: body.style.overflow,
       paddingRight: body.style.paddingRight,
-      scrollBehavior: html.style.scrollBehavior,
     };
 
-    if (active !== null) {
-      html.setAttribute("data-skill-dialog", "open");
-      lockedScrollYRef.current = window.scrollY || window.pageYOffset;
+    // Scrollbar compensation
+    const scrollbar = window.innerWidth - html.clientWidth;
+    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
 
-      const scrollbarComp = window.innerWidth - html.clientWidth;
-      if (scrollbarComp > 0) {
-        body.style.paddingRight = `${scrollbarComp}px`;
-      }
-
-      body.style.overflow = "hidden";
-      body.style.position = "fixed";
-      body.style.top = `-${lockedScrollYRef.current}px`;
-      body.style.width = "100%";
-      body.style.touchAction = "none";
-    }
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
 
     return () => {
-      if (active !== null) {
-        html.style.scrollBehavior = "auto";
-        body.style.overflow = original.overflow || "";
-        body.style.position = original.position || "";
-        body.style.width = original.width || "";
-        body.style.touchAction = original.touchAction || "";
-        body.style.paddingRight = original.paddingRight || "";
-        body.style.top = original.top || "";
-        window.scrollTo({ top: lockedScrollYRef.current, left: 0 });
-
-        requestAnimationFrame(() => {
-          html.style.scrollBehavior = original.scrollBehavior || "";
-          html.removeAttribute("data-skill-dialog");
-        });
-      }
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.width = prev.width;
+      body.style.overflow = prev.overflow;
+      body.style.paddingRight = prev.paddingRight;
+      window.scrollTo({ top: scrollY, left: 0 });
     };
-  }, [active]);
+  }, [locked]);
+}
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setActive(null);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+/* =======================
+   COMPONENT
+======================= */
+
+export default function MyProjects() {
+  const [activeSkillIdx, setActiveSkillIdx] = useState<number | null>(null);
+
+  // pro Projekt ein Slider-Index
+  const [slideIdx, setSlideIdx] = useState<number[]>(() =>
+    PROJECTS.map(() => 0)
+  );
+
+  // Portal nur clientseitig
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  // Modal: scroll lock
+  useBodyScrollLock(activeSkillIdx !== null);
+
+  const activeSkill = useMemo(
+    () => (activeSkillIdx === null ? null : SKILLS[activeSkillIdx]),
+    [activeSkillIdx]
+  );
+
+  const goPrev = (pIdx: number) => {
+    setSlideIdx((prev) => {
+      const next = [...prev];
+      const max = PROJECTS[pIdx].images.length;
+      next[pIdx] = clampModulo(next[pIdx] - 1, max);
+      return next;
+    });
+  };
+
+  const goNext = (pIdx: number) => {
+    setSlideIdx((prev) => {
+      const next = [...prev];
+      const max = PROJECTS[pIdx].images.length;
+      next[pIdx] = clampModulo(next[pIdx] + 1, max);
+      return next;
+    });
+  };
 
   return (
     <section
       id="portfolio"
       className="relative isolate overflow-hidden text-slate-800 bg-[linear-gradient(to_bottom,_#ffffff_0%,_#f1f5ff_100%)]"
     >
-      <style jsx global>{`
-        html[data-skill-dialog="open"] header,
-        html[data-skill-dialog="open"] [role="banner"],
-        html[data-skill-dialog="open"] .site-header,
-        html[data-skill-dialog="open"] nav.site-header {
-          opacity: 0 !important;
-          pointer-events: none !important;
-          transform: translateY(-8px);
-          transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-      `}</style>
-
+      {/* ==== Hintergrund: Aurora + Grid (wie vorher) ==== */}
       <div className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(closest-side,white,transparent)]">
         <div className="absolute -top-28 -left-16 h-[44rem] w-[44rem] rounded-full bg-[conic-gradient(from_180deg,rgba(99,102,241,.34),rgba(236,72,153,.28),rgba(56,189,248,.28),rgba(99,102,241,.34))] blur-2xl animate-[aurora_14s_ease-in-out_infinite]" />
         <div className="absolute -bottom-32 -right-24 h-[40rem] w-[40rem] rounded-full bg-[conic-gradient(from_90deg,rgba(56,189,248,.26),rgba(99,102,241,.26),rgba(16,185,129,.26),rgba(56,189,248,.26))] blur-2xl animate-[aurora_16s_ease-in-out_infinite_reverse]" />
@@ -177,6 +200,9 @@ export default function MyProjects() {
       />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+        {/* =======================
+            PROJECTS
+        ======================= */}
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
             Meine Projekte
@@ -190,62 +216,131 @@ export default function MyProjects() {
         </div>
 
         <div className="mt-14 grid gap-10">
-          {PROJECTS.map((p, i) => (
-            <article
-              key={p.title}
-              className="group relative grid items-stretch gap-8 md:grid-cols-2 rounded-3xl border border-slate-200/90 bg-white/85 p-6 md:p-8 shadow-[0_10px_30px_-8px_rgba(2,6,23,0.15)] backdrop-blur-lg transition will-change-transform hover:shadow-[0_22px_60px_-10px_rgba(2,6,23,0.22)] md:hover:scale-[1.008]"
-              style={{ perspective: "1200px" }}
-            >
-              <div className="pointer-events-none absolute inset-0 rounded-3xl p-[1px] [mask:linear-gradient(#000,#000)_content-box,linear-gradient(#000,#000)] [mask-composite:exclude] before:absolute before:inset-0 before:-z-10 before:rounded-3xl before:bg-[conic-gradient(from_180deg_at_50%_50%,#ef4444_0%,#3b82f6_25%,#22c55e_50%,#a855f7_75%,#ef4444_100%)] before:opacity-[0.18] group-hover:before:opacity-30 before:transition-opacity" />
+          {PROJECTS.map((project, pIdx) => {
+            const current = slideIdx[pIdx] ?? 0;
+            const hasSlider = project.images.length > 1;
 
-              <div className="relative order-2 md:order-1 [transform-style:preserve-3d] group-hover:[transform:rotateX(1.5deg)_rotateY(-2.5deg)] transition-transform duration-500">
-                <div className="relative overflow-hidden rounded-2xl ring-1 ring-slate-200/70 bg-white/90">
-                  <div className="relative w-full aspect-[16/9]">
-                    <Image
-                      src={p.img}
-                      alt={p.title}
-                      fill
-                      sizes="(min-width: 1280px) 640px, (min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
-                      priority={i === 0}
-                      className="object-contain"
-                    />
+            return (
+              <article
+                key={project.title}
+                className="group/card relative grid items-stretch gap-8 md:grid-cols-2 rounded-3xl border border-slate-200/90 bg-white/85 p-6 md:p-8 shadow-[0_10px_30px_-8px_rgba(2,6,23,0.15)] backdrop-blur-lg transition hover:shadow-[0_22px_60px_-10px_rgba(2,6,23,0.22)] md:hover:scale-[1.008]"
+              >
+                {/* Glow border (wie vorher) */}
+                <div className="pointer-events-none absolute inset-0 rounded-3xl p-[1px] [mask:linear-gradient(#000,#000)_content-box,linear-gradient(#000,#000)] [mask-composite:exclude] before:absolute before:inset-0 before:-z-10 before:rounded-3xl before:bg-[conic-gradient(from_180deg_at_50%_50%,#ef4444_0%,#3b82f6_25%,#22c55e_50%,#a855f7_75%,#ef4444_100%)] before:opacity-[0.18] group-hover/card:before:opacity-30 before:transition-opacity" />
+
+                {/* ===== Slider / Images ===== */}
+                <div
+                  className="relative order-2 md:order-1 group/slider"
+                  style={{ perspective: "1200px" }}
+                >
+                  <div className="relative overflow-hidden rounded-2xl ring-1 ring-slate-200/70 bg-white/90 transition-transform duration-500 [transform-style:preserve-3d] group-hover/card:[transform:rotateX(1.5deg)_rotateY(-2.5deg)]">
+                    <div
+                      className="relative w-full aspect-[16/9] flex transition-transform duration-500 ease-out"
+                      style={{ transform: `translateX(-${current * 100}%)` }}
+                    >
+                      {project.images.map((img, imgIdx) => (
+                        <div
+                          key={imgIdx}
+                          className="relative min-w-full h-full"
+                        >
+                          <Image
+                            src={img}
+                            alt={project.title}
+                            fill
+                            sizes="(min-width: 1280px) 640px, (min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
+                            priority={pIdx === 0}
+                            className="object-fill"
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Light sweep (wie vorher) */}
+                    <span className="pointer-events-none absolute inset-y-0 -left-[55%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-0 transition duration-700 group-hover/card:left-[115%] group-hover/card:opacity-100" />
                   </div>
-                  <span className="pointer-events-none absolute inset-y-0 -left-[55%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-0 transition duration-700 group-hover:left-[115%] group-hover:opacity-100" />
+
+                  {hasSlider && (
+                    <>
+                      <div className="absolute inset-y-0 left-0 flex items-center z-[100] px-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            goPrev(pIdx);
+                          }}
+                          className="p-2 rounded-full bg-white/95 shadow-xl text-slate-800 opacity-0 group-hover/slider:opacity-100 transition-opacity hover:bg-rose-50 pointer-events-auto"
+                          aria-label="Vorheriges Bild"
+                        >
+                          <ChevronLeft size={24} />
+                        </button>
+                      </div>
+                      <div className="absolute inset-y-0 right-0 flex items-center z-[100] px-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            goNext(pIdx);
+                          }}
+                          className="p-2 rounded-full bg-white/95 shadow-xl text-slate-800 opacity-0 group-hover/slider:opacity-100 transition-opacity hover:bg-rose-50 pointer-events-auto"
+                          aria-label="Nächstes Bild"
+                        >
+                          <ChevronRight size={24} />
+                        </button>
+                      </div>
+
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-[100]">
+                        {project.images.map((_, dotIdx) => (
+                          <div
+                            key={dotIdx}
+                            className={`h-1.5 rounded-full transition-all ${
+                              current === dotIdx
+                                ? "bg-rose-500 w-4"
+                                : "bg-slate-300 w-1.5"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
-              </div>
 
-              <div className="order-1 md:order-2 flex flex-col">
-                <header>
-                  <h3 className="text-2xl md:text-3xl font-bold">{p.title}</h3>
-                  <p className="mt-1 text-sm font-medium text-indigo-600">
-                    {p.stack}
-                  </p>
-                </header>
-                <p className="mt-4 text-slate-700">{p.desc}</p>
+                {/* ===== Text / Actions ===== */}
+                <div className="order-1 md:order-2 flex flex-col">
+                  <header>
+                    <h3 className="text-2xl md:text-3xl font-bold">
+                      {project.title}
+                    </h3>
+                    <p className="mt-1 text-sm font-medium text-indigo-600">
+                      {project.stack}
+                    </p>
+                  </header>
 
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Link
-                    href={p.github}
-                    target="_blank"
-                    className="inline-flex items-center gap-2 rounded-xl border border-slate-300/90 bg-white px-4 py-2 text-sm text-slate-800 shadow-sm transition hover:-translate-y-[1px]"
-                  >
-                    GitHub
-                  </Link>
+                  <p className="mt-4 text-slate-700">{project.desc}</p>
 
-                  <Link
-                    href={p.demo}
-                    target="_blank"
-                    className="relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-[1px] hover:shadow-[0_12px_30px_-6px_rgba(79,70,229,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
-                  >
-                    Live&nbsp;Demo
-                    <span className="pointer-events-none absolute inset-y-0 -left-[60%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/40 to-white/0 opacity-0 transition duration-700" />
-                  </Link>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <Link
+                      href={project.github}
+                      target="_blank"
+                      className="inline-flex items-center gap-2 rounded-xl border border-slate-300/90 bg-white px-4 py-2 text-sm text-slate-800 shadow-sm transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] hover:shadow-xl hover:border-slate-400 hover:-translate-y-1 active:scale-95"
+                    >
+                      GitHub
+                    </Link>
+
+                    <Link
+                      href={project.demo}
+                      target="_blank"
+                      className="relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] hover:shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] hover:-translate-y-1 active:scale-95"
+                    >
+                      Live Demo
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
 
+        {/* =======================
+            SKILLS
+        ======================= */}
         <div className="mt-24 text-center max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
             Meine Fähigkeiten
@@ -260,12 +355,10 @@ export default function MyProjects() {
           {SKILLS.map((s, idx) => (
             <button
               key={s.name}
-              onClick={() => setActive(idx)}
-              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white/85 p-4 text-center shadow-sm backdrop-blur transition hover:scale-[1.02] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-              aria-haspopup="dialog"
-              aria-controls="skill-dialog"
+              onClick={() => setActiveSkillIdx(idx)}
+              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white/85 p-4 text-center shadow-sm backdrop-blur transition-all duration-500 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             >
-              <span className="pointer-events-none absolute inset-0 rounded-2xl p-[1px] [mask:linear-gradient(#000,#000)_content-box,linear-gradient(#000,#000)] [mask-composite:exclude] before:absolute before:inset-0 before:-z-10 before:rounded-2xl before:bg-[conic-gradient(from_180deg,rgba(99,102,241,.18),rgba(236,72,153,.18),rgba(56,189,248,.18),rgba(99,102,241,.18))] before:opacity-[0.1] group-hover:before:opacity-100 before:transition-opacity" />
+              <span className="pointer-events-none absolute inset-0 rounded-2xl p-[1px] [mask:linear-gradient(#000,#000)_content-box,linear-gradient(#000,#000)] [mask-composite:exclude] before:absolute before:inset-0 before:-z-10 before:rounded-3xl before:bg-[conic-gradient(from_180deg,rgba(99,102,241,.18),rgba(236,72,153,.18),rgba(56,189,248,.18),rgba(99,102,241,.18))] before:opacity-[0.1] group-hover:before:opacity-100 before:transition-opacity" />
 
               <div className="mx-auto grid place-items-center size-16 rounded-xl bg-slate-50 ring-1 ring-slate-200">
                 <img
@@ -275,54 +368,53 @@ export default function MyProjects() {
                 />
               </div>
               <p className="mt-2 text-sm font-medium">{s.name}</p>
-
-              <span className="pointer-events-none absolute inset-y-0 -left-[55%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-0 transition duration-700 group-hover:left-[115%] group-hover:opacity-100" />
             </button>
           ))}
         </div>
       </div>
 
+      {/* =======================
+          SKILL MODAL
+      ======================= */}
       {mounted &&
-        active !== null &&
+        activeSkill &&
         createPortal(
           <div
-            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             className="fixed inset-0 z-[9999] grid place-items-center bg-black/40 px-4 backdrop-blur-sm"
-            onClick={(e) => {
-              if (e.target === dialogRef.current) setActive(null);
-            }}
+            onClick={() => setActiveSkillIdx(null)}
           >
-            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl"
+            >
               <div className="flex items-start gap-4">
                 <img
-                  src={SKILLS[active].img}
-                  alt={SKILLS[active].name}
+                  src={activeSkill.img}
+                  alt={activeSkill.name}
                   className="h-12 w-12"
                 />
                 <div>
                   <h3 className="text-xl font-semibold text-slate-900">
-                    {SKILLS[active].name}
+                    {activeSkill.name}
                   </h3>
                   <p className="mt-2 text-sm text-slate-700">
-                    {SKILLS[active].desc}
+                    {activeSkill.desc}
                   </p>
                 </div>
                 <button
-                  onClick={() => setActive(null)}
-                  aria-label="Dialog schließen"
-                  className="ml-auto rounded-lg px-2 py-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+                  onClick={() => setActiveSkillIdx(null)}
+                  className="ml-auto rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+                  aria-label="Modal schließen"
                 >
-                  ✕
+                  <X />
                 </button>
               </div>
             </div>
           </div>,
           document.body
         )}
-
-      <div className="pointer-events-none absolute bottom-0 inset-x-0 h-32 -z-10 bg-gradient-to-b from-transparent to-[#f7f9ff]" />
     </section>
   );
 }

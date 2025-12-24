@@ -32,6 +32,7 @@ const HeroSection = () => {
           Webentwicklung mit Next.js für lokale Unternehmen
         </h1>
 
+        {/* Hintergrund-Glow Effekte */}
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute top-24 left-[-18%] h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(circle,rgba(244,63,94,.35),transparent_70%)] blur-3xl" />
           <div className="absolute bottom-0 right-[-18%] h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,.4),transparent_70%)] blur-3xl" />
@@ -48,6 +49,7 @@ const HeroSection = () => {
             items-center
           "
         >
+          {/* 1. BILD MOBIL (Zuerst im Code = Oben auf Mobile) */}
           <div className="lg:hidden flex justify-center mb-10">
             <div className="relative w-full max-w-[320px] h-[420px]">
               <Image
@@ -55,11 +57,15 @@ const HeroSection = () => {
                 alt="Christian Seidel – Webentwickler"
                 fill
                 priority
-                className="object-contain object-bottom"
+                className="
+                  object-contain object-bottom
+                  [mask-image:linear-gradient(to_bottom,black_80%,transparent_100%)]
+                "
               />
             </div>
           </div>
 
+          {/* 2. TEXT-CONTENT (Danach im Code = Unten auf Mobile) */}
           <div
             className={[
               mounted ? "opacity-100" : "opacity-0",
@@ -75,14 +81,20 @@ const HeroSection = () => {
             </h2>
 
             <div className="text-white text-2xl sm:text-4xl md:text-5xl font-semibold flex justify-center lg:justify-start">
-              <TrueFocus
-                sentence="Frontend Developer"
-                manualMode
-                blurAmount={4}
-                borderColor="rgb(244 63 94)"
-                animationDuration={2}
-                pauseBetweenAnimations={2}
-              />
+              <span className="block min-[800px]:hidden">
+                Frontend Developer
+              </span>
+
+              <div className="hidden min-[800px]:block">
+                <TrueFocus
+                  sentence="Frontend Developer"
+                  manualMode
+                  blurAmount={4}
+                  borderColor="rgb(244 63 94)"
+                  animationDuration={2}
+                  pauseBetweenAnimations={2}
+                />
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4 pt-4">
@@ -120,7 +132,7 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Bild Desktop */}
+        {/* BILD DESKTOP */}
         <div
           className="
             hidden lg:block
@@ -137,8 +149,9 @@ const HeroSection = () => {
             fill
             priority
             className="
-              object-contain object-bottom
+              object-contain object-bottom 
               drop-shadow-[0_-16px_40px_rgba(0,0,0,0.45)]
+              [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)]
             "
           />
         </div>
