@@ -16,10 +16,6 @@ type Project = {
   demo: string;
 };
 
-/* =======================
-   DATA
-======================= */
-
 const SKILLS: Skill[] = [
   {
     name: "HTML",
@@ -61,7 +57,7 @@ const SKILLS: Skill[] = [
 const PROJECTS: Project[] = [
   {
     title: "DABubble",
-    images: ["/DaBubble.png", "/1.png", "/2.png"],
+    images: ["/DaBubble.png", "/dabubble1.png", "/2.dabubble2"],
     stack: "Next.JS | React | Tailwind | Firebase",
     desc: "Mit DaBubble können sich Nutzer anmelden, Channels erstellen und Direktnachrichten verschicken. Die Anwendung ermöglicht eine einfache Teamkommunikation in Echtzeit und orientiert sich am Prinzip von Slack.",
     github: "https://github.com/DevChristian1208/DaBubble",
@@ -85,20 +81,10 @@ const PROJECTS: Project[] = [
   },
 ];
 
-/* =======================
-   SMALL UTILITIES
-======================= */
-
 function clampModulo(n: number, max: number) {
   return (n + max) % max;
 }
 
-/**
- * Minimaler, robuster Scroll-Lock für Modals:
- * - Fixiert den Body
- * - Restores Scrollposition sauber
- * - optional: scrollbar compensation (damit nix "springt")
- */
 function useBodyScrollLock(locked: boolean) {
   useEffect(() => {
     if (!locked) return;
@@ -135,23 +121,14 @@ function useBodyScrollLock(locked: boolean) {
   }, [locked]);
 }
 
-/* =======================
-   COMPONENT
-======================= */
-
 export default function MyProjects() {
   const [activeSkillIdx, setActiveSkillIdx] = useState<number | null>(null);
 
-  // pro Projekt ein Slider-Index
   const [slideIdx, setSlideIdx] = useState<number[]>(() =>
     PROJECTS.map(() => 0)
   );
-
-  // Portal nur clientseitig
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-
-  // Modal: scroll lock
   useBodyScrollLock(activeSkillIdx !== null);
 
   const activeSkill = useMemo(
@@ -182,7 +159,6 @@ export default function MyProjects() {
       id="portfolio"
       className="relative isolate overflow-hidden text-slate-800 bg-[linear-gradient(to_bottom,_#ffffff_0%,_#f1f5ff_100%)]"
     >
-      {/* ==== Hintergrund: Aurora + Grid (wie vorher) ==== */}
       <div className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(closest-side,white,transparent)]">
         <div className="absolute -top-28 -left-16 h-[44rem] w-[44rem] rounded-full bg-[conic-gradient(from_180deg,rgba(99,102,241,.34),rgba(236,72,153,.28),rgba(56,189,248,.28),rgba(99,102,241,.34))] blur-2xl animate-[aurora_14s_ease-in-out_infinite]" />
         <div className="absolute -bottom-32 -right-24 h-[40rem] w-[40rem] rounded-full bg-[conic-gradient(from_90deg,rgba(56,189,248,.26),rgba(99,102,241,.26),rgba(16,185,129,.26),rgba(56,189,248,.26))] blur-2xl animate-[aurora_16s_ease-in-out_infinite_reverse]" />
@@ -200,9 +176,6 @@ export default function MyProjects() {
       />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        {/* =======================
-            PROJECTS
-        ======================= */}
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
             Meine Projekte
@@ -225,10 +198,7 @@ export default function MyProjects() {
                 key={project.title}
                 className="group/card relative grid items-stretch gap-8 md:grid-cols-2 rounded-3xl border border-slate-200/90 bg-white/85 p-6 md:p-8 shadow-[0_10px_30px_-8px_rgba(2,6,23,0.15)] backdrop-blur-lg transition hover:shadow-[0_22px_60px_-10px_rgba(2,6,23,0.22)] md:hover:scale-[1.008]"
               >
-                {/* Glow border (wie vorher) */}
                 <div className="pointer-events-none absolute inset-0 rounded-3xl p-[1px] [mask:linear-gradient(#000,#000)_content-box,linear-gradient(#000,#000)] [mask-composite:exclude] before:absolute before:inset-0 before:-z-10 before:rounded-3xl before:bg-[conic-gradient(from_180deg_at_50%_50%,#ef4444_0%,#3b82f6_25%,#22c55e_50%,#a855f7_75%,#ef4444_100%)] before:opacity-[0.18] group-hover/card:before:opacity-30 before:transition-opacity" />
-
-                {/* ===== Slider / Images ===== */}
                 <div
                   className="relative order-2 md:order-1 group/slider"
                   style={{ perspective: "1200px" }}
@@ -254,8 +224,6 @@ export default function MyProjects() {
                         </div>
                       ))}
                     </div>
-
-                    {/* Light sweep (wie vorher) */}
                     <span className="pointer-events-none absolute inset-y-0 -left-[55%] w-[55%] -skew-x-12 bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-0 transition duration-700 group-hover/card:left-[115%] group-hover/card:opacity-100" />
                   </div>
 
@@ -301,8 +269,6 @@ export default function MyProjects() {
                     </>
                   )}
                 </div>
-
-                {/* ===== Text / Actions ===== */}
                 <div className="order-1 md:order-2 flex flex-col">
                   <header>
                     <h3 className="text-2xl md:text-3xl font-bold">
@@ -338,9 +304,6 @@ export default function MyProjects() {
           })}
         </div>
 
-        {/* =======================
-            SKILLS
-        ======================= */}
         <div className="mt-24 text-center max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
             Meine Fähigkeiten
@@ -373,9 +336,6 @@ export default function MyProjects() {
         </div>
       </div>
 
-      {/* =======================
-          SKILL MODAL
-      ======================= */}
       {mounted &&
         activeSkill &&
         createPortal(
