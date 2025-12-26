@@ -57,7 +57,7 @@ const SKILLS: Skill[] = [
 const PROJECTS: Project[] = [
   {
     title: "DABubble",
-    images: ["/DaBubble.png", "/dabubble1.png", "/2.dabubble2"],
+    images: ["/DaBubble.png", "/DaBubbleFirst.png", "/DaBubbleSecond.png"],
     stack: "Next.JS | React | Tailwind | Firebase",
     desc: "Mit DaBubble können sich Nutzer anmelden, Channels erstellen und Direktnachrichten verschicken. Die Anwendung ermöglicht eine einfache Teamkommunikation in Echtzeit und orientiert sich am Prinzip von Slack.",
     github: "https://github.com/DevChristian1208/DaBubble",
@@ -65,7 +65,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: "TaskFlow",
-    images: ["/TaskFlow2.png", "/TaskFlow1.png", "/TaskFlow3.png"],
+    images: ["/TaskFlow2.png", "TaskFlowNewTask.png", "/TaskFlow3.png"],
     stack: "Next.JS | React | Tailwind | Firebase",
     desc: "TaskFlow ist eine moderne Aufgaben- und Team-Management-App. Sie kombiniert To-Do-Listen, Board-Workflow (Kanban) und Contact-/Team-Verwaltung in einer Oberfläche.",
     github: "https://github.com/DevChristian1208/myapp",
