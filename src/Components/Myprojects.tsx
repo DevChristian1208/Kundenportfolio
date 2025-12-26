@@ -65,7 +65,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: "TaskFlow",
-    images: ["/TaskFlow2.png", "TaskFlowNewTask.png", "/TaskFlow3.png"],
+    images: ["/TaskFlow2.png", "TaskFlowNewTask.png", "TaskFlow3.png"],
     stack: "Next.JS | React | Tailwind | Firebase",
     desc: "TaskFlow ist eine moderne Aufgaben- und Team-Management-App. Sie kombiniert To-Do-Listen, Board-Workflow (Kanban) und Contact-/Team-Verwaltung in einer Oberfläche.",
     github: "https://github.com/DevChristian1208/myapp",
